@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="~/css/morph.css" />
     <link rel="icon" type="image/png" href="~/FPT-Icon.png" />
     <link rel="stylesheet" href="~/lib/fontawesome-6.2.0/css/all.css" />
+    <link rel="stylesheet" href="~/lib/sweetalert2-11.5.1/css/sweetalert2.css" />
 
 </head>
 <body>
@@ -33,7 +34,7 @@
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container-fluid">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">General Cargo System</a>
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/FPT-Icon.png" alt="FPT" height="75" />General Cargo System</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -72,6 +73,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/sweetalert2-11.5.1/js/sweetalert2.all.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -98,7 +98,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Email Or Password Invaild.");
                     return Page();
                 }
             }
