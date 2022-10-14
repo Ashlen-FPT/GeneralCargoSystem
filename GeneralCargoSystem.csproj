@@ -26,4 +26,8 @@
     <ProjectReference Include="..\GeneralCargoSystem.Utility\GeneralCargoSystem.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\GCCustomer\" />
+  </ItemGroup>
+
 </Project>
