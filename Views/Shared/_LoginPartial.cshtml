@@ -1,12 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-
+@{
+    ApplicationUser applicationUser = (ApplicationUser)await UserManager.GetUserAsync(User);
+}
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-            <button class="btn text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" ><i class="fa fa-circle-user"></i> Hello @User.Identity?.Name!</button>
+            <button class="btn text-dark" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fa fa-circle-user"></i> Good Day @applicationUser.FirstName </button>
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop2" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Manage"></button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
@@ -20,7 +22,7 @@
             <a class="w-70 btn btn-sm btn-outline-success text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa fa-circle-user"></i> Hello @User.Identity?.Name!</a>
     </li>*@
     <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Login", "Account", new { area = "Identity" })">
                 <button type="submit" class="btn btn-secondary "><i class="fa fa-sign-out"></i> Logout</button>
         </form>
     </li>
