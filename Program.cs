@@ -15,30 +15,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using GeneralCargoSystem.Models;
 using GeneralCargoSystem.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
+using System.Security.Principal;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<IdentityUser ,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IEmailSender, MailKitEmailSender>();
-builder.Services.Configure<MailKitEmailSenderOptions>(options =>
-{
-    options.Host_Address = builder.Configuration["ExternalProviders:MailKit:SMTP:Address"];
-    options.Host_Port = Convert.ToInt32(builder.Configuration["ExternalProviders:MailKit:SMTP:Port"]);
-    options.Host_Username = builder.Configuration["ExternalProviders:MailKit:SMTP:Account"];
-    options.Host_Password = builder.Configuration["ExternalProviders:MailKit:SMTP:Password"];
-    options.Sender_EMail = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderEmail"];
-    options.Sender_Name = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderName"];
-});
+//builder.Services.Configure<MailKitEmailSenderOptions>(options =>
+//{
+//    options.Host_Address = builder.Configuration["ExternalProviders:MailKit:SMTP:Address"];
+//    options.Host_Port = Convert.ToInt32(builder.Configuration["ExternalProviders:MailKit:SMTP:Port"]);
+//    options.Host_Username = builder.Configuration["ExternalProviders:MailKit:SMTP:Account"];
+//    options.Host_Password = builder.Configuration["ExternalProviders:MailKit:SMTP:Password"];
+//    options.Sender_EMail = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderEmail"];
+//    options.Sender_Name = builder.Configuration["ExternalProviders:MailKit:SMTP:SenderName"];
+//});
 builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
@@ -52,6 +58,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    var service = builder.Services.AddRazorPages();
+    service.AddRazorRuntimeCompilation();
     app.UseMigrationsEndPoint();
 }
 else
@@ -69,9 +77,10 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{area=Scaffolded}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=GCAnalytics}/{controller=Dashboard}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

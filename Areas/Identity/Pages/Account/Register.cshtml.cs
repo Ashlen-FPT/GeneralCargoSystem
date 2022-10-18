@@ -11,12 +11,14 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using GeneralCargoSystem.Models;
+using GeneralCargoSystem.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -30,6 +32,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
 
         public RegisterModel(
@@ -37,7 +40,8 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -45,6 +49,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
         [BindProperty]
         public InputModel Input { get; set; }
@@ -63,7 +68,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
-            public string Email { get; set; }
+            public string Email { get; set; } 
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -75,12 +80,32 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "User Role")]
+            public string Role { get; set; }
+
+            [Display(Name = "Profile Image")]
+            public byte[] UserImage { get; set; }
+
+            public IEnumerable<SelectListItem> RoleList { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
+
+            Input = new InputModel
+            {
+                RoleList = _roleManager.Roles.Where(u => u.Name != Role.User).Select(x => x.Name).Select(i => new SelectListItem
+                {
+
+                    Text = i,
+                    Value = i
+
+                })
+            };
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
@@ -97,12 +122,25 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                 //await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 //var result = await _userManager.CreateAsync(user, Input.Password);
 
+                // To convert the user uploaded Photo as Byte Array before save to DB
+                //TO-DO
+                byte[] imageData = null;
+                if (Request.Form.Files.Count > 0)
+                {
+                    IFormFile poImgFile = Request.Form.Files["UserImage"];
+
+                    BinaryReader reader = new BinaryReader(poImgFile.OpenReadStream());
+                    imageData = reader.ReadBytes((int)poImgFile.Length);
+                }
+
                 var user = new ApplicationUser
                 {
                     UserName = Input.Email,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
                     Email = Input.Email,
+                    Role = Input.Role,
+                    UserImage=imageData
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -111,17 +149,52 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Kindly confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    //Role Creation
+                    if (!await _roleManager.RoleExistsAsync(Role.Administrator))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(Role.Administrator));
+
+                    }
+
+                    if (!await _roleManager.RoleExistsAsync(Role.Supervisor))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(Role.Supervisor));
+
+                    }
+
+                    if (!await _roleManager.RoleExistsAsync(Role.User))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(Role.User));
+
+                    }
+
+                    if (user.Role == null)
+                    {
+                        await _userManager.AddToRoleAsync(user, Role.User);
+                    }
+                    else
+                    {
+
+                        await _userManager.AddToRoleAsync(user, user.Role);
+                    }
+
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    //    protocol: Request.Scheme);
+
+
+
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Kindly confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -132,6 +205,8 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
+
+                    
                 }
                 foreach (var error in result.Errors)
                 {
