@@ -41,7 +41,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
+            //[EmailAddress]
             public string Email { get; set; }
 
             /// <summary>
@@ -71,9 +71,9 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 
         }
 
-        public IActionResult OnGet(string code = null)
+        public IActionResult OnGet(string code = null ,string email = null)
         {
-            if (code == null)
+            if (code == null || email ==null)
             {
                 return BadRequest("A code must be supplied for password reset.");
             }
@@ -81,7 +81,8 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
             {
                 Input = new InputModel
                 {
-                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code)),
+                    Email = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(email)),
                 };
                 return Page();
             }

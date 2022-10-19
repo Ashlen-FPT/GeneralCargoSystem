@@ -63,16 +63,18 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                 // For more information on how to enable account confirmation and password reset please
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var email = Input.Email;
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                email = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(email));
                 var callbackUrl = Url.Page(
                     "/Account/ResetPassword",
                     pageHandler: null,
-                    values: new { area = "Identity", code },
+                    values: new { area = "Identity", code, email },
                     protocol: Request.Scheme);
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
+                    "General Cargo System : Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");

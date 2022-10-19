@@ -42,9 +42,9 @@
                         <center><h5>Register a new account.</h5></center>
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <label style="padding-bottom:10px;">Select A Profile Image</label>
+@*                        <label style="padding-bottom:10px;">Select A Profile Image</label>
                         <input type="file" asp-for="Input.UserImage" class="form-control"  id="img" accept=".png,.jpg,.jpeg,.gif,.tif" />
-                        <span asp-validation-for="Input.UserImage" class="text-danger"></span>
+                        <span asp-validation-for="Input.UserImage" class="text-danger"></span>*@
                         <br />
                         <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" />
                         <span asp-validation-for="Input.FirstName" class="text-danger"></span>

@@ -4,15 +4,15 @@ using GeneralCargoSystem.Data;
 using System.Collections.Generic;
 using GeneralCargoSystem.Models;
 
-namespace GeneralCargoSystem.Areas.Management.Controllers
+namespace GeneralCargoSystem.Areas.UserManagement.Controllers
 {
-    [Area("Management")]
+    [Area("UserManagement")]
     [Authorize]
-    public class SystemsController : Controller
+    public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SystemsController(ApplicationDbContext context)
+        public UserController(ApplicationDbContext context)
         {
             _context = context;
         }

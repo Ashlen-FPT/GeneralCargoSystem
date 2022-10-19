@@ -124,14 +124,14 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 
                 // To convert the user uploaded Photo as Byte Array before save to DB
                 //TO-DO
-                byte[] imageData = null;
-                if (Request.Form.Files.Count > 0)
-                {
-                    IFormFile poImgFile = Request.Form.Files["UserImage"];
+                //byte[] imageData = null;
+                //if (Request.Form.Files.Count > 0)
+                //{
+                //    IFormFile poImgFile = Request.Form.Files["UserImage"];
 
-                    BinaryReader reader = new BinaryReader(poImgFile.OpenReadStream());
-                    imageData = reader.ReadBytes((int)poImgFile.Length);
-                }
+                //    BinaryReader reader = new BinaryReader(poImgFile.OpenReadStream());
+                //    imageData = reader.ReadBytes((int)poImgFile.Length);
+                //}
 
                 var user = new ApplicationUser
                 {
@@ -140,7 +140,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                     LastName = Input.LastName,
                     Email = Input.Email,
                     Role = Input.Role,
-                    UserImage=imageData
+                    //UserImage=imageData
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -181,24 +181,24 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, user.Role);
                     }
 
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    //var callbackUrl = Url.Page(
-                    //    "/Account/ConfirmEmail",
-                    //    pageHandler: null,
-                    //    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                    //    protocol: Request.Scheme);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        protocol: Request.Scheme);
 
 
 
-                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    //    $"Kindly confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(Input.Email, "General Cargo System : Verify your email",
+                        $"Kindly confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a> , then login.");
 
 
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        return RedirectToPage("Login"/*, new { email = Input.Email, returnUrl = returnUrl }*/);
                     }
                     else
                     {
