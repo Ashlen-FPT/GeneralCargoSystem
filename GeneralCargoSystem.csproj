@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\GCCustomer\" />
-    <Folder Include="Areas\Management\" />
   </ItemGroup>
 
 </Project>

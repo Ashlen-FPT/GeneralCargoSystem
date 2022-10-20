@@ -30,6 +30,10 @@
     .btn-outline-secondary {
         border-radius: 10px;
     }
+
+    #navigation{
+       display:none;
+    }
 </style>
 @*<h1>@ViewData["Title"]</h1>*@
 <body id="RegisterpageBody">
@@ -54,7 +58,7 @@
                         <br />
                         <input asp-for="Input.Email" class="form-control" placeholder="Email" />
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
-                        @if (User.IsInRole(Role.Supervisor))
+                        @if (User.IsInRole(Enums.Supervisor))
                         {
                             <div class="form-group">
                                 <label asp-for="Input.Role"></label>

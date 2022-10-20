@@ -97,7 +97,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 
             Input = new InputModel
             {
-                RoleList = _roleManager.Roles.Where(u => u.Name != Role.User).Select(x => x.Name).Select(i => new SelectListItem
+                RoleList = _roleManager.Roles.Where(u => u.Name != Enums.User).Select(x => x.Name).Select(i => new SelectListItem
                 {
 
                     Text = i,
@@ -140,6 +140,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                     LastName = Input.LastName,
                     Email = Input.Email,
                     Role = Input.Role,
+                    UserStatus = Enums.ActiveUser,
                     //UserImage=imageData
                 };
 
@@ -153,27 +154,27 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     //Role Creation
-                    if (!await _roleManager.RoleExistsAsync(Role.Administrator))
+                    if (!await _roleManager.RoleExistsAsync(Enums.Administrator))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(Role.Administrator));
+                        await _roleManager.CreateAsync(new IdentityRole(Enums.Administrator));
 
                     }
 
-                    if (!await _roleManager.RoleExistsAsync(Role.Supervisor))
+                    if (!await _roleManager.RoleExistsAsync(Enums.Supervisor))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(Role.Supervisor));
+                        await _roleManager.CreateAsync(new IdentityRole(Enums.Supervisor));
 
                     }
 
-                    if (!await _roleManager.RoleExistsAsync(Role.User))
+                    if (!await _roleManager.RoleExistsAsync(Enums.User))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(Role.User));
+                        await _roleManager.CreateAsync(new IdentityRole(Enums.User));
 
                     }
 
                     if (user.Role == null)
                     {
-                        await _userManager.AddToRoleAsync(user, Role.User);
+                        await _userManager.AddToRoleAsync(user, Enums.User);
                     }
                     else
                     {
