@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using GeneralCargoSystem.Data;
 using GeneralCargoSystem.Utility;
+using GeneralCargoSystem.Models;
 
 namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 {
@@ -63,6 +64,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
 
+
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -88,12 +90,26 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true               
                 var userStatus = _context.ApplicationUsers.Where(a => a.Email == Input.Email).FirstOrDefault()?.UserStatus;
-                
+                var findUsername = _context.ApplicationUsers.Where(a => a.Email == Input.Email).FirstOrDefault()?.FirstName;
+
                 if (userStatus == Enums.ActiveUser)
                 {
                     var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
+
+
+                        var log = new Logs
+                        {
+                            UserEmail = Input.Email,
+                            UserName = findUsername,
+                            LogType = Enums.Login,
+                            AffectedTable = "Users",
+                            DateTime = DateTime.Now
+                        };
+                        _context.Logs.Add(log);
+                        _context.SaveChanges();
+
                         _logger.LogInformation("User logged in.");
                         return LocalRedirect(returnUrl);
                     }

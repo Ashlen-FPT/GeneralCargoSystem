@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using GeneralCargoSystem.Data;
 using GeneralCargoSystem.Models;
 using GeneralCargoSystem.Utility;
 using Microsoft.AspNetCore.Authentication;
@@ -20,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace GeneralCargoSystem.Areas.Identity.Pages.Account
@@ -33,6 +35,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
 
         public RegisterModel(
@@ -41,7 +44,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager , ApplicationDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -50,6 +53,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _context = context;
         }
         [BindProperty]
         public InputModel Input { get; set; }
@@ -144,13 +148,23 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                     //UserImage=imageData
                 };
 
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
+                    var log = new Logs
+                    {
+                        UserEmail = Input.Email,
+                        UserName = Input.FirstName,
+                        LogType = Enums.NewUser,
+                        AffectedTable = "Users",
+                        DateTime = DateTime.Now
+                    };
+                    _context.Logs.Add(log);
+                    _context.SaveChanges();
+
                     _logger.LogInformation("User created a new account with password.");
-
-
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     //Role Creation
@@ -199,6 +213,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
+
                         return RedirectToPage("Login"/*, new { email = Input.Email, returnUrl = returnUrl }*/);
                     }
                     else

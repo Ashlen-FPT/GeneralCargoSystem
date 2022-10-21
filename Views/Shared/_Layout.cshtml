@@ -54,7 +54,7 @@
 
                             <li class="nav-item dropdown mx-auto">
 
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-gauge"></i> General Cargo Analytics</a>
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> General Cargo Analytics <i class="fa fa-gauge"></i></a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" asp-area="GCAnalytics" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
                                         <a class="dropdown-item" href="#">Reports</a>
@@ -62,7 +62,7 @@
                             </li>
 
                             <li class="nav-item dropdown mx-auto">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-book"></i> Booking Management</a>
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Booking Management <i class="fa fa-book"></i></a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" asp-area="GCAnalytics" asp-controller="Dashboard" asp-action="Index">New Booking</a>
                                     <a class="dropdown-item" href="#">View Bookings</a>
@@ -71,7 +71,7 @@
                             @if (User.IsInRole(Enums.Supervisor))
                             {
                                 <li class="nav-item dropdown mx-auto">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sliders"></i> Master Data Management</a>
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Site Management <i class="fa fa-sliders"></i></a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" asp-area="GCAnalytics" asp-controller="Dashboard" asp-action="Index">FPT Facilities</a>
                                         <a class="dropdown-item" href="#">Periodical Time Slots</a>
@@ -82,16 +82,16 @@
                             @if (User.IsInRole(Enums.Supervisor))
                             {
                                 <li class="nav-item dropdown mx-auto">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-gear"></i> System Management</a>
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> System Management <i class="fa fa-gear"></i></a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" asp-area="Management" asp-controller="User" asp-action="Index">Users</a>
-                                        <a class="dropdown-item" href="#">System Logs</a>
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="Log" asp-action="Index">System Logs</a>
                                     </div>
                                 </li>
                             }
 
                             <li class="nav-item mx-auto">
-                        <a class="nav-link text-dark" asp-area="Scaffolded" asp-controller="Home" asp-action="Index"> <i class="fa fa-computer"></i> Support</a>
+                                <a class="nav-link text-dark" asp-area="Scaffolded" asp-controller="Home" asp-action="Index">Support <i class="fa fa-question"></i></a>
                         </li>
                             @*                            <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="Scaffolded" asp-controller="Home" asp-action="Index">Home</a>

@@ -6,21 +6,27 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GeneralCargoSystem.Data;
+using GeneralCargoSystem.Models;
+using GeneralCargoSystem.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+        public ConfirmEmailModel(UserManager<IdentityUser> userManager , ApplicationDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         /// <summary>
@@ -44,6 +50,18 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
+            var userFirstName = _context.ApplicationUsers.Where(a => a.Email == user.ToString()).FirstOrDefault()?.FirstName;
+            var log = new Logs
+            {
+                UserEmail = user.ToString(),
+                UserName = userFirstName,
+                LogType = Enums.EmailVerification,
+                AffectedTable = "Users",
+                DateTime = DateTime.Now
+            };
+            _context.Logs.Add(log);
+            _context.SaveChanges();
+
             StatusMessage = result.Succeeded ? "Thank you for verifying your email , your will be redirected shortly." : "Error verifying your email.";
             return Page();
         }
