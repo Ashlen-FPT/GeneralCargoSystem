@@ -91,10 +91,11 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true               
                 var userStatus = _context.ApplicationUsers.Where(a => a.Email == Input.Email).FirstOrDefault()?.UserStatus;
                 var findUsername = _context.ApplicationUsers.Where(a => a.Email == Input.Email).FirstOrDefault()?.FirstName;
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
 
                 if (userStatus == Enums.ActiveUser)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                    
                     if (result.Succeeded)
                     {
 
@@ -113,27 +114,30 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                         _logger.LogInformation("User logged in.");
                         return LocalRedirect(returnUrl);
                     }
-                    if (result.RequiresTwoFactor)
+                    else
                     {
-                        return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                        if (!result.Succeeded)
+                        {
+                            ModelState.AddModelError(string.Empty, "Email Or Password Invaild.");
+                        }
+                        
                     }
-                    if (result.IsLockedOut)
-                    {
-                        _logger.LogWarning("User account locked out.");
-                        return RedirectToPage("./Lockout");
-                    }
+                    //if (result.RequiresTwoFactor)
+                    //{
+                    //    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    //}
+                    //if (result.IsLockedOut)
+                    //{
+                    //    _logger.LogWarning("User account locked out.");
+                    //    return RedirectToPage("./Lockout");
+                    //}
                 }
                 else
                 {
-                    if(userStatus == Enums.InactiveUser)
+                    if (userStatus == Enums.InactiveUser)
                     {
                         ModelState.AddModelError(string.Empty, "Your account has been deactivated.");
                     }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Email Or Password Invaild.");
-                    }                   
-                    return Page();
                 }
 
             }

@@ -1,6 +1,7 @@
 ﻿@page
 @model RegisterModel
 @using GeneralCargoSystem.Utility
+@inject SignInManager<IdentityUser> SignInManager
 @{
     ViewData["Title"] = "Register";
 }
@@ -31,8 +32,8 @@
         border-radius: 10px;
     }
 
-    #navigation{
-       display:none;
+    #navigation {
+        display: none;
     }
 </style>
 @*<h1>@ViewData["Title"]</h1>*@
@@ -46,7 +47,7 @@
                         <center><h5>Register a new account.</h5></center>
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-@*                        <label style="padding-bottom:10px;">Select A Profile Image</label>
+                        @*                        <label style="padding-bottom:10px;">Select A Profile Image</label>
                         <input type="file" asp-for="Input.UserImage" class="form-control"  id="img" accept=".png,.jpg,.jpeg,.gif,.tif" />
                         <span asp-validation-for="Input.UserImage" class="text-danger"></span>*@
                         <br />
@@ -56,13 +57,14 @@
                         <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" />
                         <span asp-validation-for="Input.LastName" class="text-danger"></span>
                         <br />
-                        <input asp-for="Input.Email" class="form-control" placeholder="Email" />
+                        <input asp-for="Input.Email" class="form-control" placeholder="Email" id="email" />
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        <br />
                         @if (User.IsInRole(Enums.Supervisor))
                         {
                             <div class="form-group">
-                                <label asp-for="Input.Role"></label>
-                                @Html.DropDownListFor(m => m.Input.Role, Model.Input.RoleList, "- Select A Role -", new { @class = "form-control" })
+                                @*<label asp-for="Input.Role"></label>*@
+                                @Html.DropDownListFor(m => m.Input.Role, Model.Input.RoleList, "- Select A Role -", new { @class = "form-control form-select" })
                             </div>
                         }
 
@@ -135,6 +137,17 @@
         </div>*@
     </div>
 </body>
+@if (SignInManager.IsSignedIn(User))
+{
+    <script>
+        function init() {
+            document.getElementById("email").value = '';
+            document.getElementById("password").value = '';
+        }
+        window.onload = init;
+    </script>
+
+}
 <script>
 
     function passwordVisible() {

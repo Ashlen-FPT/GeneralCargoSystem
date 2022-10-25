@@ -101,7 +101,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 
             Input = new InputModel
             {
-                RoleList = _roleManager.Roles.Where(u => u.Name != Enums.User).Select(x => x.Name).Select(i => new SelectListItem
+                RoleList = _roleManager.Roles/*.Where(u => u.Name != Enums.User)*/.Select(x => x.Name).Select(i => new SelectListItem
                 {
 
                     Text = i,

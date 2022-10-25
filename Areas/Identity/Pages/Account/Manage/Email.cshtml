@@ -5,10 +5,10 @@
     ViewData["ActivePage"] = ManageNavPages.Email;
 }
 
-<h3>@ViewData["Title"]</h3>
-<partial name="_StatusMessage" for="StatusMessage" />
+<center><h3>@ViewData["Title"]</h3></center>
+<partial name="_Status" for="StatusMessage" />
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 mx-auto">
         <form id="email-form" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             @if (Model.IsEmailConfirmed)
