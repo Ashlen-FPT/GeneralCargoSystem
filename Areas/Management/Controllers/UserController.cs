@@ -34,6 +34,19 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
                 user.Role = roles.FirstOrDefault(u => u.Id == roleId)?.Name;
             }
 
+            var email = User.Identity.Name;
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == email.ToString()).FirstOrDefault()?.FirstName;
+            var log = new Logs
+            {
+                UserEmail = email.ToString(),
+                UserName = findUsername,
+                LogType = Enums.Read,
+                AffectedTable = "Users",
+                DateTime = DateTime.Now
+            };
+            _context.Logs.Add(log);
+            _context.SaveChanges();
+
             return Json(new { data = userList });
         }
 

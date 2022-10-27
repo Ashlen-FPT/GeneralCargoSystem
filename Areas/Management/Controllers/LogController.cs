@@ -20,6 +20,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 

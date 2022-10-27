@@ -5,6 +5,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using GeneralCargoSystem.Data;
+using GeneralCargoSystem.Models;
+using GeneralCargoSystem.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,15 +20,18 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
+        private readonly ApplicationDbContext _context;
+
 
         public ChangePasswordModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<ChangePasswordModel> logger)
+            ILogger<ChangePasswordModel> logger , ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         /// <summary>
@@ -112,7 +118,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account.Manage
             {
                 foreach (var error in changePasswordResult.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(string.Empty, /*error.Description*/ "Current Password Incorrect");
                 }
                 return Page();
             }
@@ -120,6 +126,19 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account.Manage
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";
+
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == user.ToString()).FirstOrDefault()?.FirstName;
+
+            var log = new Logs
+            {
+                UserEmail = user.ToString(),
+                UserName = findUsername,
+                LogType = Enums.UserPasswordUpdated,
+                AffectedTable = "Users",
+                DateTime = DateTime.Now
+            };
+            _context.Logs.Add(log);
+            _context.SaveChanges();
 
             return RedirectToPage();
         }
