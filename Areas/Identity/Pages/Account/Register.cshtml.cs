@@ -146,6 +146,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                     Role = Input.Role,
                     UserStatus = Enums.ActiveUser,
                     //UserImage=imageData
+                    CreatedOnDateTime =DateTime.Now
                 };
 
 
