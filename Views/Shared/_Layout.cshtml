@@ -33,8 +33,8 @@
     <link rel="icon" type="image/png" href="~/FPT-Icon.png" />
     <link rel="stylesheet" href="~/lib/fontawesome-6.2.0/css/all.css" />
     <link rel="stylesheet" href="~/lib/sweetalert2-11.5.1/css/sweetalert2.css" />
-    <link rel="stylesheet" href="~/lib/datatables/datatables.min.css"/>
-    <link rel="stylesheet" href="~/lib/datatables/Buttons-2.2.3/css/buttons.dataTables.min.css"/>
+    <link rel="stylesheet" href="~/lib/datatables/datatables.min.css" />
+    <link rel="stylesheet" href="~/lib/datatables/Buttons-2.2.3/css/buttons.dataTables.min.css" />
 
 </head>
 <body>
@@ -55,10 +55,10 @@
                             <li class="nav-item dropdown mx-auto">
 
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> General Cargo Analytics <i class="fa fa-gauge"></i></a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" asp-area="GCAnalytics" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-                                        <a class="dropdown-item" href="#">Reports</a>
-                                    </div>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-area="GCAnalytics" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                                    <a class="dropdown-item" href="#">Reports</a>
+                                </div>
                             </li>
 
                             <li class="nav-item dropdown mx-auto">
@@ -73,8 +73,9 @@
                                 <li class="nav-item dropdown mx-auto">
                                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Site Management <i class="fa fa-sliders"></i></a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" asp-area="GCAnalytics" asp-controller="Dashboard" asp-action="Index">FPT Facilities</a>
-                                        <a class="dropdown-item" href="#">Periodical Time Slots</a>
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="Dashboard" asp-action="Index"> Manage FPT Facilities</a>
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="Dashboard" asp-action="Index">Manage Time Slots</a>
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="Vessels" asp-action="Index">Manage Vessels</a>
                                     </div>
                                 </li>
                             }
@@ -92,7 +93,7 @@
 
                             <li class="nav-item mx-auto">
                                 <a class="nav-link text-dark" asp-area="Scaffolded" asp-controller="Home" asp-action="Index">Support <i class="fa fa-question"></i></a>
-                        </li>
+                            </li>
                             @*                            <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="Scaffolded" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -118,13 +119,29 @@
     </div>
     </footer>*@
     <footer id="footer" class="card-footer">
-
-        <p> General Cargo System Copyright &copy; 2022 | All Rights Reserved.</p>
+        <p> <a style="float:left;padding-left:10px;">General Cargo System Copyright &copy; 2022</a><a style="float:right;padding-right:10px;">All Rights Reserved.</a></p>
 
     </footer>
 
+    <div id="generic-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog w3-animate-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="generic-modal-close" type="button" class="btn-close btn btn-danger active" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/lib/sweetalert2-11.5.1/js/sweetalert2.all.js"></script>
     <script src="~/lib/datatables/datatables.min.js"></script>
     <script src="~/lib/datatables/Buttons-2.2.3/js/buttons.dataTables.js"></script>
@@ -136,7 +153,28 @@
     <script src="~/lib/datatables/Buttons-2.2.3/js/vfs_fonts.js"></script>
     <script src="~/js/moment.js"></script>
     <script src="~/js/datetime.js"></script>
+    <script src="~/js/Modal.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 50) {
+                    document.getElementById('navigation').classList.add('fixed-top');
+                    navbar_height = document.querySelector('.navbar').offsetHeight;
+                    document.body.style.paddingTop = navbar_height + 'px';
+                } else {
+                    document.getElementById('navigation').classList.remove('fixed-top');
+                    document.body.style.paddingTop = '0';
+                }
+            });
+        });
+    </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(function () {
+            Modal.StartUp();
+        })
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

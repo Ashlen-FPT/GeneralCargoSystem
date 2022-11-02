@@ -4,10 +4,12 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GeneralCargoSystem.Data;
 using GeneralCargoSystem.Models;
+using GeneralCargoSystem.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -36,6 +38,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account.Manage
         public string Username { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
+        public byte[] UserImage { get; set; }
 
 /// <summary>
 ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -64,6 +67,8 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public byte[] Image { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -75,14 +80,23 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account.Manage
             var app = _context.ApplicationUsers;
             var firstName = app.Find(id)?.FirstName;
             var lastName = app.Find(id)?.LastName;
+            var userImage = app.Find(id)?.UserImage;
 
             Username = userName;
             Firstname = firstName;
             Lastname = lastName;
+            UserImage = userImage;
+
+            //Update User Image
+            //byte[] imageData = null;
+
+      
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+
+                PhoneNumber = phoneNumber,
+                Image = userImage,
             };
         }
 
@@ -100,6 +114,19 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var newImage = Input.Image;
+
+            if (Request.Form.Files.Count > 0)
+            {
+                IFormFile file = Request.Form.Files.FirstOrDefault();
+
+                using (var dataStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(dataStream);
+                    newImage = dataStream.ToArray();
+                }
+            }
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -112,6 +139,12 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            var updateImage = _context.ApplicationUsers.Where(a => a.Email == user.ToString()).FirstOrDefault();
+            updateImage.UserImage = newImage;
+
+            _context.ApplicationUsers.Update(updateImage);
+            _context.SaveChanges();
+
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -122,6 +155,18 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == user.ToString()).FirstOrDefault()?.FirstName;
+            var log = new Logs
+            {
+                UserEmail = user.ToString(),
+                UserName = findUsername,
+                LogType = Enums.Updated,
+                AffectedTable = "Users",
+                DateTime = DateTime.Now
+            };
+            _context.Logs.Add(log);
+            _context.SaveChanges();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

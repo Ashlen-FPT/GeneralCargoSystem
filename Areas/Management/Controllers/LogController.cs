@@ -8,7 +8,8 @@ using GeneralCargoSystem.Utility;
 namespace GeneralCargoSystem.Areas.Management.Controllers
 {
     [Area("Management")]
-    [Authorize]
+    [Authorize(Roles = Enums.Supervisor)]
+    [NoDirectAccess]
     public class LogController : Controller
     {
         private readonly ApplicationDbContext _context;

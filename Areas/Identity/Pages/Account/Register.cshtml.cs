@@ -88,6 +88,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
             [Display(Name = "User Role")]
             public string Role { get; set; }
 
+            
             [Display(Name = "Profile Image")]
             public byte[] UserImage { get; set; }
 
@@ -128,14 +129,18 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
 
                 // To convert the user uploaded Photo as Byte Array before save to DB
                 //TO-DO
-                //byte[] imageData = null;
-                //if (Request.Form.Files.Count > 0)
-                //{
-                //    IFormFile poImgFile = Request.Form.Files["UserImage"];
+                byte[] imageData = null;
 
-                //    BinaryReader reader = new BinaryReader(poImgFile.OpenReadStream());
-                //    imageData = reader.ReadBytes((int)poImgFile.Length);
-                //}
+                if (Request.Form.Files.Count > 0)
+                {
+                    IFormFile file = Request.Form.Files.FirstOrDefault();
+                    
+                    using (var dataStream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(dataStream);
+                        imageData = dataStream.ToArray();
+                    }
+                }
 
                 var user = new ApplicationUser
                 {
@@ -145,7 +150,7 @@ namespace GeneralCargoSystem.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     Role = Input.Role,
                     UserStatus = Enums.ActiveUser,
-                    //UserImage=imageData
+                    UserImage=imageData,
                     CreatedOnDateTime =DateTime.Now
                 };
 

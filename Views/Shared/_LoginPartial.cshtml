@@ -3,12 +3,23 @@
 @inject UserManager<IdentityUser> UserManager
 @{
     ApplicationUser applicationUser = (ApplicationUser)await UserManager.GetUserAsync(User);
+
+    var image = applicationUser.UserImage;
 }
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
         <div class="btn-group" role="group" aria-label="Manage Account">
-            <button class="btn btn-sm text-dark" asp-area="Identity" asp-page="/Account/Manage/Index"> Good Day @applicationUser.FirstName <i class="fa fa-user" style="padding-left:5px;"></i> </button>
+            <button class="btn btn-sm text-dark" asp-area="Identity" asp-page="/Account/Manage/Index"> Good Day @applicationUser.FirstName
+
+                @if (image != null)
+                {
+                    <img style="width:50px;height:50px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@(Convert.ToBase64String(image))">
+                }
+                else{
+                    <i class="fa fa-user" style="padding-left:5px;"></i>
+                }
+                </button>
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop2" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Manage"></button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">

@@ -5,6 +5,15 @@
 }
 
 <header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
+    <style>
+        #navigation {
+            display: none;
+        }
+    </style>
 </header>
+<div style="padding-bottom:150px;"></div>
+<center><img src="~/FPT-Icon.png" alt="FPT" height="200" /></center>
+<div style="padding-bottom:50px;"></div>
+<center><h1 class="text-danger">Access Restricted <i class="fa fa-ban"></i></h1></center>
+<div style="padding-bottom:50px;"></div>
+<center><a class="btn btn-primary active" asp-area="GCAnalytics" asp-controller="Dashboard" asp-action="Index"> <i class="fa fa-arrow-left"></i> Go Back</a></center>
