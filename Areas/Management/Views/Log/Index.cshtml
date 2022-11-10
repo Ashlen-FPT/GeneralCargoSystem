@@ -3,6 +3,11 @@
 @{
     ViewData["Title"] = "Logs";
 }
+<center>
+<header>
+    <h1>System Logs <i class="fa fa-history"></i></h1>
+</header>
+</center>
 <!-- Main content -->
 <div class="content">
     <div class="container-fluid">
@@ -14,6 +19,7 @@
                         <th>User</th>
                         <th>Email</th>
                         <th>Log</th>
+                        <th>Additional Data</th>
                         <th id="date">Date & Time</th>
                         <th>Table</th>
                     </tr>
@@ -49,9 +55,9 @@ function loadDataTable() {
         "ajax": {
             "url": "/Management/Log/GetLogs"
         },
-        "order": [[3, 'desc']],
+        "order": [[4, 'desc']],
         "columnDefs": [ {
-      targets: 3,
+      targets: 4,
 render:$.fn.dataTable.render.moment('', 'DD MMMM YYYY HH:mm:ss')
     } ],
         dom: 'Bfrtip',
@@ -90,6 +96,7 @@ render:$.fn.dataTable.render.moment('', 'DD MMMM YYYY HH:mm:ss')
             { "data": "userName", "width": "15%" },
             { "data": "userEmail", "width": "15%" },
             { "data": "logType", "width": "15%" },
+            { "data": "additionalData", "width": "15%" },
             { "data": "dateTime", "width": "15%" },
             { "data": "affectedTable", "width": "15%"},
         ],

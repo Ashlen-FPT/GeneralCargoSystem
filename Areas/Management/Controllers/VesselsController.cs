@@ -10,6 +10,8 @@ using GeneralCargoSystem.Models.GC;
 using Microsoft.AspNetCore.Authorization;
 using GeneralCargoSystem.Utility;
 using System.Configuration;
+using GeneralCargoSystem.Models;
+using System.Security.Claims;
 
 namespace GeneralCargoSystem.Areas.Management.Controllers
 {
@@ -28,6 +30,20 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
         // GET: Management/Vessels
         public async Task<IActionResult> Index()
         {
+            var email = User.Identity!.Name!;
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
+            var log = new Logs
+            {
+                UserEmail = email,
+                UserName = findUsername,
+                LogType = Enums.Read,
+                AffectedTable = "Vessels",
+                AdditionalData = "All Vessels Read",
+                DateTime = DateTime.Now
+            };
+            _context.Logs.Add(log);
+            _context.SaveChanges();
+
             return View(await _context.Vessels.ToListAsync());
         }
 
@@ -45,6 +61,20 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             {
                 return NotFound();
             }
+
+            var email = User.Identity!.Name!;
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
+            var log = new Logs
+            {
+                UserEmail = email,
+                UserName = findUsername,
+                LogType = Enums.Read,
+                AffectedTable = "Vessels",
+                AdditionalData = "Expanded Vessel Details",
+                DateTime = DateTime.Now
+            };
+            _context.Logs.Add(log);
+            _context.SaveChanges();
 
             return PartialView(vessels);
             //return View(vessels);
@@ -67,9 +97,23 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(vessels);
+
+                var email = User.Identity!.Name!;
+                var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
+                var log = new Logs
+                {
+                    UserEmail = email,
+                    UserName = findUsername,
+                    LogType = Enums.Created,
+                    AffectedTable = "Vessels",
+                    DateTime = DateTime.Now
+                };
+                _context.Logs.Add(log);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+
             return View(vessels);
         }
 
@@ -120,8 +164,24 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
                         throw;
                     }
                 }
+
+                var email = User.Identity!.Name!;
+                var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
+                var log = new Logs
+                {
+                    UserEmail = email,
+                    UserName = findUsername,
+                    LogType = Enums.Updated,
+                    AffectedTable = "Vessels",
+                    DateTime = DateTime.Now
+                };
+                _context.Logs.Add(log);
+                _context.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
+
+
             return View(vessels);
         }
 
@@ -158,7 +218,17 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             {
                 _context.Vessels.Remove(vessels);
             }
-
+            var email = User.Identity!.Name!;
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
+            var log = new Logs
+            {
+                UserEmail = email,
+                UserName = findUsername,
+                LogType = Enums.Deleted,
+                AffectedTable = "Vessels",
+                DateTime = DateTime.Now
+            };
+            _context.Logs.Add(log);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

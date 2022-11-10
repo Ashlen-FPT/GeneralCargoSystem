@@ -1,40 +1,148 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
 }
-<!-- MAP & BOX PANE -->
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">FPT Facility </h3>
+<style>
+    .card{
+        width:400px;
+        height:400px;
+    }
+</style>
+<center>
+<header style="padding-top:20px;">
+    <h1>General Cargo Truck Bookings Today ~ @DateTime.Now.ToString("dd MMMM yyyy")</h1>
+</header>
+    <div>
+        <b>*No Bookings Today</b>
     </div>
-    <!-- /.card-header -->
-    <div class="card-body p-0">
-        <div class="d-md-flex">
-            <div class="p-1 flex-fill" style="overflow: hidden">
-                <!-- Map will be created here -->
-                <div id="world-map-markers" style="height: 450px; overflow: hidden">
-                    <script type="text/javascript">
+</center>
 
 
-                        width = '100%';		// the width of the embedded map in pixels or percentage
-                        height = '450';		// the height of the embedded map in pixels or percentage
-                        border = '1';		// the width of the border around the map (zero means no border)
-                        shownames = 'false';	// to display ship names on the map (true or false)
-                        latitude = '-29.86785466514976';	// the latitude of the center of the map, in decimal degrees
-                        longitude = '31.033532527708704';	// the longitude of the center of the map, in decimal degrees
-                        zoom = '15';		// the zoom level of the map (values between 2 and 17)
-                        maptype = '1';		// use 0 for Normal Map, 1 for Satellite
-                        trackvessel = '0';	// MMSI of a vessel (note: vessel will be displayed only if within range of the system) - overrides "zoom" option
-                        fleet = '';		// the registered email address of a user-defined fleet (user's default fleet is used) - overrides "zoom" option
 
-
-                    </script>
-                    <script type="text/javascript" src="//www.marinetraffic.com/js/embed.js"></script>
-                </div>
+<br />
+<div class="row">
+    <div class="col-sm-4">
+        <!-- MAP & BOX PANE -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">FPT Durban Facility </h3>
             </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <div class="d-md-flex">
+                    <div class="p-1 flex-fill" style="overflow: hidden">
+                        <!-- Map will be created here -->
+                        <div id="world-map-markers" style="height: 300px; overflow: hidden">
+                            <script type="text/javascript">
 
-        </div><!-- /.d-md-flex -->
+
+                                width = '100%';		// the width of the embedded map in pixels or percentage
+                                height = '300';		// the height of the embedded map in pixels or percentage
+                                border = '1';		// the width of the border around the map (zero means no border)
+                                shownames = 'false';	// to display ship names on the map (true or false)
+                                latitude = '-29.86785466514976';	// the latitude of the center of the map, in decimal degrees
+                                longitude = '31.033532527708704';	// the longitude of the center of the map, in decimal degrees
+                                zoom = '15';		// the zoom level of the map (values between 2 and 17)
+                                maptype = '1';		// use 0 for Normal Map, 1 for Satellite
+                                trackvessel = '0';	// MMSI of a vessel (note: vessel will be displayed only if within range of the system) - overrides "zoom" option
+                                fleet = '';		// the registered email address of a user-defined fleet (user's default fleet is used) - overrides "zoom" option
+
+
+                            </script>
+                            <script type="text/javascript" src="//www.marinetraffic.com/js/embed.js"></script>
+                        </div>
+                    </div>
+
+                </div><!-- /.d-md-flex -->
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+            </div>
+        </div>
     </div>
-    <!-- /.card-body -->
-    <div class="card-footer clearfix">
+
+    <div class="col-sm-4">
+        <!-- MAP & BOX PANE -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">FPT Cape Town Facility </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <div class="d-md-flex">
+                    <div class="p-1 flex-fill" style="overflow: hidden">
+                        <!-- Map will be created here -->
+                        <div id="world-map-markers" style="height: 300px; overflow: hidden">
+                            <script type="text/javascript">
+
+
+                                width = '100%';		// the width of the embedded map in pixels or percentage
+                                height = '300';		// the height of the embedded map in pixels or percentage
+                                border = '1';		// the width of the border around the map (zero means no border)
+                                shownames = 'false';	// to display ship names on the map (true or false)
+                                latitude = '-33.907155';	// the latitude of the center of the map, in decimal degrees
+                                longitude = '18.428586';	// the longitude of the center of the map, in decimal degrees
+                                zoom = '15';		// the zoom level of the map (values between 2 and 17)
+                                maptype = '1';		// use 0 for Normal Map, 1 for Satellite
+                                trackvessel = '0';	// MMSI of a vessel (note: vessel will be displayed only if within range of the system) - overrides "zoom" option
+                                fleet = '';		// the registered email address of a user-defined fleet (user's default fleet is used) - overrides "zoom" option
+
+
+                            </script>
+                            <script type="text/javascript" src="//www.marinetraffic.com/js/embed.js"></script>
+                        </div>
+                    </div>
+
+                </div><!-- /.d-md-flex -->
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-2">
+        <!-- MAP & BOX PANE -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">FPT Port Elizabeth Facility </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <div class="d-md-flex">
+                    <div class="p-1 flex-fill" style="overflow: hidden">
+                        <!-- Map will be created here -->
+                        <div id="world-map-markers" style="height: 300px; overflow: hidden">
+                            <script type="text/javascript">
+
+
+                                width = '100%';		// the width of the embedded map in pixels or percentage
+                                height = '300';		// the height of the embedded map in pixels or percentage
+                                border = '1';		// the width of the border around the map (zero means no border)
+                                shownames = 'false';	// to display ship names on the map (true or false)
+                                latitude = '-33.963099';	// the latitude of the center of the map, in decimal degrees
+                                longitude = '25.633833';	// the longitude of the center of the map, in decimal degrees
+                                zoom = '15';		// the zoom level of the map (values between 2 and 17)
+                                maptype = '1';		// use 0 for Normal Map, 1 for Satellite
+                                trackvessel = '0';	// MMSI of a vessel (note: vessel will be displayed only if within range of the system) - overrides "zoom" option
+                                fleet = '';		// the registered email address of a user-defined fleet (user's default fleet is used) - overrides "zoom" option
+
+
+                            </script>
+                            <script type="text/javascript" src="//www.marinetraffic.com/js/embed.js"></script>
+                        </div>
+                    </div>
+
+                </div><!-- /.d-md-flex -->
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+            </div>
+        </div>
     </div>
 </div>
+
+
+
+
+
+

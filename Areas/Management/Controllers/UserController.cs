@@ -32,14 +32,14 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             foreach (var user in userList)
             {
                 var roleId = userRole.FirstOrDefault(u => u.UserId == user.Id)?.RoleId;
-                user.Role = roles.FirstOrDefault(u => u.Id == roleId)?.Name;
+                user.Role = roles.FirstOrDefault(u => u.Id == roleId)!.Name;
             }
 
-            var email = User.Identity.Name;
-            var findUsername = _context.ApplicationUsers.Where(a => a.Email == email.ToString()).FirstOrDefault()?.FirstName;
+            var email = User.Identity!.Name!;
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
             var log = new Logs
             {
-                UserEmail = email.ToString(),
+                UserEmail = email,
                 UserName = findUsername,
                 LogType = Enums.Read,
                 AffectedTable = "Users",
