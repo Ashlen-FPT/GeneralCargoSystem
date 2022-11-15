@@ -4,9 +4,9 @@
     ViewData["Title"] = "Vessels";
 }
 <center>
-<header>
-    <h1>Manage Vessels <i class="fa fa-ship"></i></h1>
-</header>
+    <header>
+        <h1>Manage Vessels <i class="fa fa-ship"></i></h1>
+    </header>
 </center>
 <p style="padding-bottom:60px;">
     <a class="btn btn-primary active" style="float:right;" data-ajax="true" data-ajax-url="@Url.Action("Create","Vessels")" data-ajax-success="Modal.PartialView"><i class="fa fa-plus"></i> Add A Vessel</a>
@@ -69,7 +69,7 @@
                             <td>
                                 <center>
                                     <div class="btn-group dropend">
-                                        <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Expand">Manage @Html.DisplayFor(modelItem => item.VesselName)</button>
+                                        <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Expand">Manage This Vessel</button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
                                             <a class="dropdown-item btn btn-success" data-ajax="true" data-ajax-url="@Url.Action("Edit","Vessels", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-refresh"></i> Update </a>
                                             <div style="padding:5px;"></div>
@@ -107,6 +107,41 @@
                 ],
             });
         });
+
+        //Read Creation Message
+        var created = "@((string)ViewBag.Created)";
+
+        if (created !== null && created !== '') {
+            Swal.fire(
+                created,
+                '',
+                'success'
+            )
+
+        }
+
+        //Read Update Message
+        var updated = "@((string)ViewBag.Updated)";
+
+        if (updated !== null && updated !== '') {
+            Swal.fire(
+                updated,
+                '',
+                'success',
+
+            )
+        }
+
+        //Read Delete Message
+        var deleted = "@((string)ViewBag.Deleted)";
+
+        if (deleted !== null && deleted !== '') {
+            Swal.fire(
+                deleted,
+                '',
+                'success'
+            )
+        }
     </script>
 }
 

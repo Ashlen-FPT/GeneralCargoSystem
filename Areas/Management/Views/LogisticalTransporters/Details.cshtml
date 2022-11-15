@@ -1,0 +1,24 @@
+﻿@model GeneralCargoSystem.Models.GC.LogisticalTransporter
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>Logistical Transporter Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-7">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-3">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-7">
+            @Html.DisplayNameFor(model => model.RegistrationNo)
+        </dt>
+        <dd class = "col-sm-2">
+            @Html.DisplayFor(model => model.RegistrationNo)
+        </dd>
+    </dl>
+</div>

@@ -1,0 +1,39 @@
+﻿@model GeneralCargoSystem.Models.GC.LogisticalTransporter
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Add Logistical Transporter</h4>
+<hr />
+<div class="row">
+    <div>
+        <form asp-action="Create" id="createForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="RegistrationNo" class="control-label"></label>
+                <input asp-for="RegistrationNo" class="form-control" />
+                <span asp-validation-for="RegistrationNo" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="padding-top:10px; float:right;">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $.validator.unobtrusive.parse("#createForm");
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

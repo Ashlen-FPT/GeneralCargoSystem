@@ -27,6 +27,55 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             _context = context;
         }
 
+        #region RemoteValidations
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsVesselNameExist(string vesselName, int Id = 0)
+        {
+
+            bool isExist = _context.Vessels.Any(x => x.VesselName == vesselName && x.Id!=Id);
+            if (isExist == true)
+            {
+                return Json(data: false);
+            }
+            else
+            {
+                return Json(data: true);
+            }
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsVesselNoExist(string vesselNo , int Id = 0)
+        {
+
+            bool isExist = _context.Vessels.Any(x => x.VesselNo == vesselNo && x.Id != Id);
+            if (isExist == true)
+            {
+                return Json(data: false);
+            }
+            else
+            {
+                return Json(data: true);
+            }
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsVoyageNoExist(string voyageNo, int Id = 0)
+        {
+
+            bool isExist = _context.Vessels.Any(x => x.VoyageNo == voyageNo && x.Id != Id);
+            if (isExist == true)
+            {
+                return Json(data: false);
+            }
+            else
+            {
+                return Json(data: true);
+            }
+        }
+        #endregion
+
+
         // GET: Management/Vessels
         public async Task<IActionResult> Index()
         {
@@ -43,6 +92,10 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             };
             _context.Logs.Add(log);
             _context.SaveChanges();
+
+            ViewBag.Created = TempData["Create"] as string;
+            ViewBag.Updated = TempData["Update"] as string;
+            ViewBag.Deleted = TempData["Delete"] as string;
 
             return View(await _context.Vessels.ToListAsync());
         }
@@ -94,8 +147,10 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(/*[Bind("Id,VesselName")]*/ Vessels vessels)
         {
+
             if (ModelState.IsValid)
             {
+
                 _context.Add(vessels);
 
                 var email = User.Identity!.Name!;
@@ -110,6 +165,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
                 };
                 _context.Logs.Add(log);
                 await _context.SaveChangesAsync();
+                TempData["Create"] = "Vessel Created !";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -177,7 +233,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
                 };
                 _context.Logs.Add(log);
                 _context.SaveChanges();
-
+                TempData["Update"] = "Vessel Updated !";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -230,6 +286,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             };
             _context.Logs.Add(log);
             await _context.SaveChangesAsync();
+            TempData["Delete"] = "Vessel Deleted !";
             return RedirectToAction(nameof(Index));
         }
 

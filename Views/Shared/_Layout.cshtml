@@ -64,8 +64,8 @@
                             <li class="nav-item dropdown mx-auto">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Booking Management <i class="fa fa-book"></i></a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-area="GCAnalytics" asp-controller="Dashboard" asp-action="Index">New Booking</a>
-                                    <a class="dropdown-item" href="#">View Bookings</a>
+                                    <a class="dropdown-item" asp-area="GCCustomer" asp-controller="GCBookings" asp-action="Index">New Booking</a>
+                                    <a class="dropdown-item" asp-area="GCCustomer" asp-controller="GCBookings" asp-action="Index">Manage & View Bookings</a>
                                 </div>
                             </li>
                             @if (User.IsInRole(Enums.Supervisor))
@@ -73,9 +73,10 @@
                                 <li class="nav-item dropdown mx-auto">
                                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Site Management <i class="fa fa-sliders"></i></a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" asp-area="Management" asp-controller="Dashboard" asp-action="Index"> Manage FPT Facilities</a>
-                                        <a class="dropdown-item" asp-area="Management" asp-controller="Dashboard" asp-action="Index">Manage Transporters</a>
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="FPTSites" asp-action="Index"> Manage FPT Facilities</a>
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="LogisticalTransporters" asp-action="Index">Manage Transporters</a>
                                         <a class="dropdown-item" asp-area="Management" asp-controller="Vessels" asp-action="Index">Manage Vessels</a>
+                                        <a class="dropdown-item" asp-area="Management" asp-controller="Commodities" asp-action="Index">Manage Commodities</a>
                                     </div>
                                 </li>
                             }

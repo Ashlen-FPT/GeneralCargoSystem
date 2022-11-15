@@ -1,0 +1,114 @@
+﻿@model IEnumerable<GeneralCargoSystem.Models.GC.LogisticalTransporter>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<center>
+    <header>
+        <h1>Manage Transporters <i class="fa fa-truck"></i></h1>
+    </header>
+</center>
+
+<p style="padding-bottom:60px;">
+    <a class="btn btn-primary active" style="float:right;" data-ajax="true" data-ajax-url="@Url.Action("Create","LogisticalTransporters")" data-ajax-success="Modal.PartialView"><i class="fa fa-plus"></i> Add A Transporter</a>
+</p>
+<div class="content">
+    <div class="container-fluid">
+        <div class="p-4 border rounded">
+            <table class="table" id="myTable">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegistrationNo)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RegistrationNo)
+                            </td>
+                            <td>
+                                <center>
+                                    <div class="btn-group dropend">
+                                        <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Expand">Manage Transporter</button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
+                                            <a class="dropdown-item btn btn-success" data-ajax="true" data-ajax-url="@Url.Action("Edit","LogisticalTransporters", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-refresh"></i> Update </a>
+                                            <div style="padding:5px;"></div>
+                                            <a class="dropdown-item btn btn-danger" data-ajax="true" data-ajax-url="@Url.Action("Delete","LogisticalTransporters", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-trash"></i> Remove</a>
+                                            <div style="padding:5px;"></div>
+                                            <a class="dropdown-item btn btn-info" data-ajax="true" data-ajax-url="@Url.Action("Details","LogisticalTransporters", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-info-circle"></i> More Information</a>
+
+                                        </div>
+                                    </div>
+                                </center>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'pageLength',
+                    },
+                ],
+            });
+        });
+
+        //Read Creation Message
+        var created = "@((string)ViewBag.Created)";
+
+        if (created !== null && created !== '') {
+            Swal.fire(
+                created,
+                '',
+                'success'
+            )
+
+        }
+
+        //Read Update Message
+        var updated = "@((string)ViewBag.Updated)";
+
+        if (updated !== null && updated !== '') {
+            Swal.fire(
+                updated,
+                '',
+                'success',
+
+            )
+        }
+
+        //Read Delete Message
+        var deleted = "@((string)ViewBag.Deleted)";
+
+        if (deleted !== null && deleted !== '') {
+            Swal.fire(
+                deleted,
+                '',
+                'success'
+            )
+        }
+    </script>
+}
