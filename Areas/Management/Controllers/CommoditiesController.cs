@@ -25,6 +25,24 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             _context = context;
         }
 
+        #region RemoteValidations
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsCommodityExist(string commodityItem, int Id = 0)
+        {
+
+            bool isExist = _context.Commodities.Any(x => x.CommodityItem == commodityItem && x.Id != Id);
+            if (isExist == true)
+            {
+                return Json(data: false);
+            }
+            else
+            {
+                return Json(data: true);
+            }
+        }
+        #endregion
+
         // GET: Management/Commodities
         public async Task<IActionResult> Index()
         {

@@ -25,6 +25,39 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             _context = context;
         }
 
+        #region RemoteValidations
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsTransporterExist(string name, int Id = 0)
+        {
+
+            bool isExist = _context.LogisticalTransporters.Any(x => x.Name == name && x.Id != Id);
+            if (isExist == true)
+            {
+                return Json(data: false);
+            }
+            else
+            {
+                return Json(data: true);
+            }
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsRegistrationNoExist(string registrationNo, int Id = 0)
+        {
+
+            bool isExist = _context.LogisticalTransporters.Any(x => x.RegistrationNo == registrationNo && x.Id != Id);
+            if (isExist == true)
+            {
+                return Json(data: false);
+            }
+            else
+            {
+                return Json(data: true);
+            }
+        }
+        #endregion
+
         // GET: Management/LogisticalTransporters
         public async Task<IActionResult> Index()
         {

@@ -35,6 +35,39 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             return View(await _context.FPTSites.ToListAsync());
         }
 
+        #region RemoteValidations
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsFPTSiteExist(string siteLocation, int Id = 0)
+        {
+
+            bool isExist = _context.FPTSites.Any(x => x.SiteLocation == siteLocation && x.Id != Id);
+            if (isExist == true)
+            {
+                return Json(data: false);
+            }
+            else
+            {
+                return Json(data: true);
+            }
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsLocationIdExist(string locationId, int Id = 0)
+        {
+
+            bool isExist = _context.FPTSites.Any(x => x.LocationId == locationId && x.Id != Id);
+            if (isExist == true)
+            {
+                return Json(data: false);
+            }
+            else
+            {
+                return Json(data: true);
+            }
+        }
+        #endregion
+
         // GET: Management/FPTSites/Details/5
         public async Task<IActionResult> Details(int? id)
         {
