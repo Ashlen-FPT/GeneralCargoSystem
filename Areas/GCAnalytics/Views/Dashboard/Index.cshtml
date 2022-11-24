@@ -1,18 +1,80 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
+
+    var bookingsToday = ViewBag.Bookings;
 }
 <style>
-    .card{
-        width:400px;
-        height:400px;
-    }
+    /*    .card {
+                          width: 400px;
+                            height: 400px;
+         },*/
 </style>
 <center>
-<header style="padding-top:20px;">
-    <h1>General Cargo Truck Bookings Today ~ @DateTime.Now.ToString("dddd , dd MMMM yyyy")</h1>
-</header>
+    <header style="padding-top:20px;">
+        @*<h1>GC Truck Bookings Today ~ @DateTime.Now.ToString("dddd , dd MMMM yyyy")</h1>*@
+    </header>
     <div>
-        <b>*No Bookings Today</b>
+        <div class="card">
+            <div class="card-body">
+                <heading>
+                    <h1>GC Truck Bookings Today ~ @DateTime.Now.ToString("dddd , dd MMMM yyyy")</h1>
+                </heading>
+
+                <hr />
+
+                @if (bookingsToday.Count != 0)
+                {
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Booking Reference
+                                </th>
+                                <th>
+                                    Booked Time
+                                </th>
+                                <th>
+                                    Commodity
+                                </th>
+                                <th>
+                                    Logistical Transporter
+                                </th>
+                                <th>
+                                    Transporter Registration
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in bookingsToday)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.BookingReference
+                                    </td>
+                                    <td>
+                                        @item.Time
+                                    </td>
+                                    <td>
+                                        @item.Commodity.CommodityItem
+                                    </td>
+                                    <td>
+                                        @item.LogisticalTransporter.Name
+                                    </td>
+                                    <td>
+                                        @item.Registration
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <h1><b>No Bookings Today <i class="fa fa-thumbs-up"></i></b></h1>
+                }
+            </div>
+        </div>
     </div>
 </center>
 
@@ -22,7 +84,7 @@
 <div class="row">
     <div class="col-sm-4">
         <!-- MAP & BOX PANE -->
-        <div class="card">
+        <div id="dur" class="card">
             <div class="card-header">
                 <h3 class="card-title">FPT Durban Facility </h3>
             </div>
@@ -62,7 +124,7 @@
 
     <div class="col-sm-4">
         <!-- MAP & BOX PANE -->
-        <div class="card">
+        <div id="ct" class="card">
             <div class="card-header">
                 <h3 class="card-title">FPT Cape Town Facility </h3>
             </div>
@@ -100,9 +162,9 @@
         </div>
     </div>
 
-    <div class="col-sm-2">
+    <div class="col-sm-4">
         <!-- MAP & BOX PANE -->
-        <div class="card">
+        <div id="plz" class="card">
             <div class="card-header">
                 <h3 class="card-title">FPT Port Elizabeth Facility </h3>
             </div>

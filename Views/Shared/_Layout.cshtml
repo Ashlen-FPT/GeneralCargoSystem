@@ -64,7 +64,7 @@
                             <li class="nav-item dropdown mx-auto">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Booking Management <i class="fa fa-book"></i></a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-area="GCCustomer" asp-controller="GCBookings" asp-action="Index">Create New Booking</a>
+                                    <a class="dropdown-item" asp-area="GCCustomer" asp-controller="GCBookings" asp-action="InitiateBooking">Create New Booking</a>
                                     <a class="dropdown-item" asp-area="GCCustomer" asp-controller="GCBookings" asp-action="Index">Manage & View Bookings</a>
                                 </div>
                             </li>
@@ -125,10 +125,10 @@
     </footer>
 
     <div id="generic-modal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog w3-animate-zoom" role="document">
+        <div class="modal-dialog modal-lg w3-animate-zoom" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button id="generic-modal-close" type="button" class="btn-close btn btn-danger active" data-dismiss="modal" aria-label="Close">
+                    <button id="generic-modal-close" type="button" class="btn-close btn btn-danger active" data-bs-dismiss="modal" aria-label="Close">
                     </button>
                 </div>
                 <div class="modal-body">

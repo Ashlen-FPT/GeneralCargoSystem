@@ -10,6 +10,7 @@ using GeneralCargoSystem.Models.GC;
 using GeneralCargoSystem.Utility;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 {
@@ -18,12 +19,99 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
     public class GCBookingsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
 
-        public GCBookingsController(ApplicationDbContext context)
+        public static Random id = new Random();
+        public static int num = id.Next(1000);
+
+        public GCBookingsController(ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
+
+        public IActionResult InitiateBooking()
+        {
+            var bookings = _context.GCBookings.Where(x => /*x.Date == DateTime.Today &&*/ x.Time == "01:00");
+            var c = bookings.Count();
+
+            ViewBag.Count = c;
+
+            return View();
+        }
+
+        public IActionResult Booking(DateTime bDate, string bTime)
+        {
+            GCBooking book = new GCBooking();
+
+            book.Time = bTime;
+            book.Date = bDate;
+
+            TempData["Date"] = bDate;
+            TempData["Time"] = bTime;
+
+            ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem");
+            ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation");
+            ViewData["VesselId"] = new SelectList(_context.Vessels, "Id", "VesselName");
+            ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name");
+
+            return PartialView(book);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Booking(GCBooking gCBooking)
+        {
+            var email = User.Identity!.Name!;
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
+
+            if (gCBooking != null)
+            {
+                gCBooking.Date = (DateTime)TempData["Date"]!;
+                gCBooking.Time = TempData["Time"]!.ToString()!;
+                gCBooking.CreatedBy = findUsername;
+                gCBooking.CreatedOn = DateTime.Now;
+                gCBooking.BookingReference = "GC-" + num + gCBooking.Date.ToString("ddMMyy");
+
+                _context.Add(gCBooking);
+                await _context.SaveChangesAsync();
+
+                var transport = _context.LogisticalTransporters.Where(x => x.Id == gCBooking.LogisticalTransporterId).FirstOrDefault()!.Name;
+                var FPTsite = _context.FPTSites.Where(x => x.Id == gCBooking.FPTSiteId).FirstOrDefault()!.SiteLocation;
+                var commodity = _context.Commodities.Where(x => x.Id == gCBooking.CommodityId).FirstOrDefault()!.CommodityItem;
+
+                //Email Notification
+                await _emailSender.SendEmailAsync(email, $"{"General Cargo Booking : " + gCBooking.Date.ToString("dd MMMM yyyy") + " AT " + gCBooking.Time}",
+
+                    $"Booking Reference : <text> {gCBooking.BookingReference}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Booked Date : <text> {gCBooking.Date.ToString("dd MMMM yyyy")}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Booked Time : <text> {gCBooking.Time}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Booked For : <text> {transport + " - " +" Registration : "+gCBooking.Registration}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"FPT Facility  : <text> {FPTsite}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Commodity & Quantity : <text> {commodity + " , " + gCBooking.Quantity}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Addtional Comments : <text>{gCBooking.Comments}</text>");
+
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem", gCBooking!.CommodityId);
+            ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation", gCBooking.FPTSiteId);
+            ViewData["VesselId"] = new SelectList(_context.Vessels, "Id", "VesselName", gCBooking.VesselId);
+            ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name", gCBooking.LogisticalTransporterId);
+            return View(gCBooking);
+        }
         // GET: GCCustomer/GCBookings
         public async Task<IActionResult> Index()
         {
@@ -58,7 +146,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem");
             ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation");
             ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name");
-            return View();
+            return PartialView();
         }
 
         // POST: GCCustomer/GCBookings/Create
@@ -66,7 +154,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BookingReference,Date,FPTSiteId,VesselId,LogisticalTransporterId,Registration,Quantity,CommodityId,Name,PhoneNumber,Email,CreatedOn")] GCBooking gCBooking)
+        public async Task<IActionResult> Create(/*[Bind("Id,BookingReference,Date,FPTSiteId,VesselId,LogisticalTransporterId,Registration,Quantity,CommodityId,Name,PhoneNumber,Email,CreatedOn")]*/ GCBooking gCBooking)
         {
             if (ModelState.IsValid)
             {
@@ -94,9 +182,10 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                 return NotFound();
             }
             ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem", gCBooking.CommodityId);
-            ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "LocationId", gCBooking.FPTSiteId);
+            ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation", gCBooking.FPTSiteId);
             ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name", gCBooking.LogisticalTransporterId);
-            return View(gCBooking);
+            ViewData["VesselId"] = new SelectList(_context.Vessels, "Id", "VesselName", gCBooking.VesselId);
+            return PartialView(gCBooking);
         }
 
         // POST: GCCustomer/GCBookings/Edit/5
@@ -104,14 +193,14 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BookingReference,Date,FPTSiteId,VesselId,LogisticalTransporterId,Registration,Quantity,CommodityId,Name,PhoneNumber,Email,CreatedOn")] GCBooking gCBooking)
+        public async Task<IActionResult> Edit(int id,/* [Bind("Id,BookingReference,Date,FPTSiteId,VesselId,LogisticalTransporterId,Registration,Quantity,CommodityId,Name,PhoneNumber,Email,CreatedOn")]*/ GCBooking gCBooking)
         {
             if (id != gCBooking.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (gCBooking !=null)
             {
                 try
                 {
@@ -131,9 +220,10 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem", gCBooking.CommodityId);
-            ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "LocationId", gCBooking.FPTSiteId);
+            ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem", gCBooking!.CommodityId);
+            ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation", gCBooking.FPTSiteId);
             ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name", gCBooking.LogisticalTransporterId);
+            ViewData["VesselId"] = new SelectList(_context.Vessels, "Id", "VesselName", gCBooking.VesselId);
             return View(gCBooking);
         }
 
@@ -172,14 +262,14 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             {
                 _context.GCBookings.Remove(gCBooking);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GCBookingExists(int id)
         {
-          return _context.GCBookings.Any(e => e.Id == id);
+            return _context.GCBookings.Any(e => e.Id == id);
         }
     }
 }
