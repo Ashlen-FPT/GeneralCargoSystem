@@ -11,6 +11,10 @@ using GeneralCargoSystem.Utility;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 {
@@ -30,15 +34,31 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             _emailSender = emailSender;
         }
 
-
-        public IActionResult InitiateBooking()
+        // GET: GCCustomer/GCBookings
+        public async Task<IActionResult> Index()
         {
-            var bookings = _context.GCBookings.Where(x => /*x.Date == DateTime.Today &&*/ x.Time == "01:00");
-            var c = bookings.Count();
+            var applicationDbContext = _context.GCBookings.Include(g => g.Commodity).Include(g => g.FPTSites).Include(g => g.LogisticalTransporter);
+            return View(await applicationDbContext.ToListAsync());
+        }
 
-            ViewBag.Count = c;
+        public IActionResult InitiateBooking(DateTime tDate)
+        {
+
+
+            var status_1 = _context.GCBookings.Where(x => x.Time == "01:00").ToList();
+            var status_2 = _context.GCBookings.Where(x => x.Time == "02:00").ToList();
+
+            ViewBag.Status1 = status_1;
+            ViewBag.Status2 = status_2;
 
             return View();
+        }
+
+        public IActionResult SpecificBooking(DateTime sDate, string sTime)
+        {
+            var specificBooking = _context.GCBookings.Where(x => x.Date == sDate && x.Time == sTime).Include(g => g.Commodity).Include(g => g.FPTSites).Include(g => g.LogisticalTransporter);
+            ViewBag.Time = sTime;
+            return PartialView(specificBooking.ToList());
         }
 
         public IActionResult Booking(DateTime bDate, string bTime)
@@ -93,7 +113,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                     $"Booked Time : <text> {gCBooking.Time}</text>" +
                     $"<br/>" +
                     $"<br/>" +
-                    $"Booked For : <text> {transport + " - " +" Registration : "+gCBooking.Registration}</text>" +
+                    $"Booked For : <text> {transport + " - " + " Registration : " + gCBooking.Registration}</text>" +
                     $"<br/>" +
                     $"<br/>" +
                     $"FPT Facility  : <text> {FPTsite}</text>" +
@@ -104,7 +124,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                     $"<br/>" +
                     $"Addtional Comments : <text>{gCBooking.Comments}</text>");
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(BookingDetails), new { id = gCBooking.Id });
             }
             ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem", gCBooking!.CommodityId);
             ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation", gCBooking.FPTSiteId);
@@ -112,16 +132,29 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name", gCBooking.LogisticalTransporterId);
             return View(gCBooking);
         }
-        // GET: GCCustomer/GCBookings
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.GCBookings.Include(g => g.Commodity).Include(g => g.FPTSites).Include(g => g.LogisticalTransporter);
-            return View(await applicationDbContext.ToListAsync());
-        }
 
+        public IActionResult GCBookingDetails()
+        {
+            byte[] pdfBytes;
+
+            using (var stream = new MemoryStream())
+            using (var wri = new PdfWriter(stream))
+            using (var pdf = new PdfDocument(wri))
+            using (var doc = new Document(pdf))
+            {
+
+                doc.Add(new Paragraph("Test"));
+
+                doc.Close();
+                doc.Flush();
+                pdfBytes = stream.ToArray();
+            }
+            return new FileContentResult(pdfBytes, "application/pdf");
+        }
         // GET: GCCustomer/GCBookings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null || _context.GCBookings == null)
             {
                 return NotFound();
@@ -131,7 +164,32 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                 .Include(g => g.Commodity)
                 .Include(g => g.FPTSites)
                 .Include(g => g.LogisticalTransporter)
+                .Include(g => g.Vessels)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (gCBooking == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView(gCBooking);
+        }
+
+        public async Task<IActionResult> BookingDetails(int? id)
+        {
+
+            if (id == null || _context.GCBookings == null)
+            {
+                return NotFound();
+            }
+
+            var gCBooking = await _context.GCBookings
+                .Include(g => g.Commodity)
+                .Include(g => g.FPTSites)
+                .Include(g => g.LogisticalTransporter)
+                .Include(g => g.Vessels)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (gCBooking == null)
             {
                 return NotFound();
@@ -200,7 +258,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                 return NotFound();
             }
 
-            if (gCBooking !=null)
+            if (gCBooking != null)
             {
                 try
                 {

@@ -119,10 +119,15 @@
     &copy; 2022 - General Cargo System  - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>
     </footer>*@
-    <footer id="footer" class="card-footer">
-        <p> <a style="float:left;padding-left:10px;">General Cargo System Copyright &copy; 2022</a><a style="float:right;padding-right:10px;">All Rights Reserved.</a></p>
 
-    </footer>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <footer id="footer" class="card-footer">
+            <p> <a style="float:left;padding-left:10px;">General Cargo System Copyright &copy; 2022</a><a style="float:right;padding-right:10px;">All Rights Reserved.</a></p>
+
+        </footer>
+    }
+
 
     <div id="generic-modal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg w3-animate-zoom" role="document">

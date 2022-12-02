@@ -92,6 +92,22 @@
                 {
                     extend: 'pageLength',
                 },
+                {
+                    extend: 'excel',
+                    title: 'GCBookings - General Cargo',
+                    text: '<i class= "fa fa-file-excel"></i> Excel',
+                    exportOptions: {
+                        columns: ':not(:last-child)',
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    title: 'GCBookings - General Cargo',
+                    text: '<i class= "fa fa-file-pdf"></i> PDF',
+                    exportOptions: {
+                        columns: ':not(:last-child)',
+                    }
+                },
             ],
         });
     });
