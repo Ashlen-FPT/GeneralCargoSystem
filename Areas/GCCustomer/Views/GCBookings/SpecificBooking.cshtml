@@ -6,69 +6,81 @@
     var time = ViewBag.Time;
 }
 <style>
-
     .modal-dialog {
         overflow-y: initial !important
     }
 
     .modal-body {
-        height: 80vh;
+        max-height: calc(100vh - 200px);
         overflow-y: auto;
     }
 </style>
+
 <center>
     <header>
         <h1>Specific Booking(s) ~ @time  </h1>
     </header>
 </center>
+<hr/>
 <br />
-<div class="content">
+<div class="content" id="sbooking">
     <div class="container-fluid">
         <div class="p-4 border rounded">
-            <table class="table" id="myTable">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.BookingReference)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Date)
-                        </th>
-                        <th>
-                            Booked Time
-                        </th>
-                        <th>
-                            FPT Site
-                        </th>
-                        <th>
-                            Logistical Transporter
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+            @if (Model.Count() > 0)
+            {
+                <table class="table" id="myTable">
+                    <thead>
                         <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.BookingReference)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Date)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Time)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FPTSites.SiteLocation)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LogisticalTransporter.Name)
-                            </td>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BookingReference)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Date)
+                            </th>
+                            <th>
+                                Booked Time
+                            </th>
+                            <th>
+                                FPT Site
+                            </th>
+                            <th>
+                                Logistical Transporter
+                            </th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BookingReference)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Time)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FPTSites.SiteLocation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LogisticalTransporter.Name)
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <center> <h1><b>NO BOOKING(S) AT THIS PERIOD <i class="fa fa-triangle-exclamation"></i></b></h1></center>
+                
+            }
+
         </div>
     </div>
 </div>

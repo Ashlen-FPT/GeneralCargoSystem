@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "General Cargo Bookings";
+
+    var FilteredDate = ViewBag.FDate;
 }
 
 <center>
@@ -9,6 +11,18 @@
         <h1>Manage & View All Bookings <i class="fa fa-table"></i></h1>
     </header>
 </center>
+<br />
+<br />
+<div>
+    <div class="form-group">
+        <label class="control-label">Filter By Date:</label>
+        <input class="form-control" type="date" id="date" value="@FilteredDate" />
+        <br />
+        <button id ="clear" style="float:right;"class="btn btn-danger"onclick="javascript:date.value=''">Clear Filter</button>
+    </div>
+</div>
+<br />
+<br />
 <br />
 <div class="content">
     <div class="container-fluid">
@@ -85,6 +99,21 @@
 <script type="text/javascript" src="~/lib/datatables/datatables.js"></script>
 <script>
     $(document).ready(function () {
+        var dateInput = document.getElementById('date');
+
+        $('#clear').click(function () {
+            location.href = "/GCCustomer/GCBookings/Index?filterDate= " + "empty";
+        });
+
+        $("#date").change((a) => {
+            if (a.target.value) {
+
+                location.href = "/GCCustomer/GCBookings/Index?filterDate= " + dateInput.value;
+
+                console.log(dateInput.value)
+            }
+        });
+
         $('#myTable').DataTable({
 
             dom: 'Bfrtip',

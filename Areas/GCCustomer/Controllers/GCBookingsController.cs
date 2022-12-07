@@ -15,6 +15,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Globalization;
 
 namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 {
@@ -25,31 +26,59 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;
 
-        public static Random id = new Random();
-        public static int num = id.Next(1000);
-
         public GCBookingsController(ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
             _emailSender = emailSender;
         }
 
-        // GET: GCCustomer/GCBookings
-        public async Task<IActionResult> Index()
+        #region RemoteValidations
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsRegistrationExist(string registration, int Id = 0)
         {
+
+            bool isExist = _context.GCBookings.Any(x => x.Registration == registration && x.Id != Id);
+            if (isExist == true)
+            {
+                return Json(data: false);
+            }
+            else
+            {
+                return Json(data: true);
+            }
+        }
+        #endregion
+        // GET: GCCustomer/GCBookings
+        public async Task<IActionResult> Index(DateTime filterDate)
+        {
+
+            string fdate = "0001/01/01";
             var applicationDbContext = _context.GCBookings.Include(g => g.Commodity).Include(g => g.FPTSites).Include(g => g.LogisticalTransporter);
+
+            if (filterDate != Convert.ToDateTime(fdate))
+            {
+                ViewBag.FDate = filterDate.ToString("yyyy-MM-dd");
+                var filteredList = await applicationDbContext.Where(x => x.Date == filterDate).ToListAsync();
+                return View(filteredList);
+
+            }
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public IActionResult InitiateBooking(DateTime tDate)
+        public IActionResult InitiateBooking(DateTime queryDate)
         {
-
-
-            var status_1 = _context.GCBookings.Where(x => x.Time == "01:00").ToList();
-            var status_2 = _context.GCBookings.Where(x => x.Time == "02:00").ToList();
+            var status_1 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "01:00").ToList();
+            var status_2 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "02:00").ToList();
+            string date = "0001/01/01";
 
             ViewBag.Status1 = status_1;
             ViewBag.Status2 = status_2;
+
+            if (queryDate != Convert.ToDateTime(date))
+            {
+                ViewBag.TDate = queryDate.ToString("yyyy-MM-dd");
+            }
 
             return View();
         }
@@ -63,6 +92,11 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 
         public IActionResult Booking(DateTime bDate, string bTime)
         {
+            int lastAddedId = 0;
+            //var data = _context.GCBookings.Where(x => x.CreatedOn.ToString().Substring(0, 10) == DateTime.Today.AddDays(-1).ToString()).FirstOrDefault()!;
+            //lastAddedId = data.Id;
+            //var trimRef = data.BookingReference.Substring(3,3);
+            //_ = trimRef;
             GCBooking book = new GCBooking();
 
             book.Time = bTime;
@@ -83,6 +117,9 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Booking(GCBooking gCBooking)
         {
+            string referenceGeneration = new Random().Next(1000, 9999).ToString();
+
+            //    generatedRef = Convert.ToString(num + 100).PadRight(4, '0');
             var email = User.Identity!.Name!;
             var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
 
@@ -92,7 +129,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                 gCBooking.Time = TempData["Time"]!.ToString()!;
                 gCBooking.CreatedBy = findUsername;
                 gCBooking.CreatedOn = DateTime.Now;
-                gCBooking.BookingReference = "GC-" + num + gCBooking.Date.ToString("ddMMyy");
+                gCBooking.BookingReference = "GC-" + referenceGeneration + gCBooking.Date.ToString("ddMMyy");
 
                 _context.Add(gCBooking);
                 await _context.SaveChangesAsync();
@@ -101,7 +138,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                 var FPTsite = _context.FPTSites.Where(x => x.Id == gCBooking.FPTSiteId).FirstOrDefault()!.SiteLocation;
                 var commodity = _context.Commodities.Where(x => x.Id == gCBooking.CommodityId).FirstOrDefault()!.CommodityItem;
 
-                //Email Notification
+                //Email Notification - New Booking
                 await _emailSender.SendEmailAsync(email, $"{"General Cargo Booking : " + gCBooking.Date.ToString("dd MMMM yyyy") + " AT " + gCBooking.Time}",
 
                     $"Booking Reference : <text> {gCBooking.BookingReference}</text>" +
@@ -235,6 +272,11 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             }
 
             var gCBooking = await _context.GCBookings.FindAsync(id);
+            TempData["BookRef"] = gCBooking!.BookingReference;
+            TempData["Date"] = gCBooking!.Date;
+            TempData["Time"] = gCBooking!.Time;
+            TempData["CreatedOn"] = gCBooking!.CreatedOn;
+            TempData["CreatedBy"] = gCBooking!.CreatedBy;
             if (gCBooking == null)
             {
                 return NotFound();
@@ -253,6 +295,9 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,/* [Bind("Id,BookingReference,Date,FPTSiteId,VesselId,LogisticalTransporterId,Registration,Quantity,CommodityId,Name,PhoneNumber,Email,CreatedOn")]*/ GCBooking gCBooking)
         {
+            var email = User.Identity!.Name!;
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
+
             if (id != gCBooking.Id)
             {
                 return NotFound();
@@ -262,8 +307,41 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             {
                 try
                 {
+                    gCBooking.BookingReference = (string)TempData["BookRef"]!;
+                    gCBooking.Date = (DateTime)TempData["Date"]!;
+                    gCBooking.Time = (string)TempData["Time"]!;
+                    gCBooking.CreatedOn = (DateTime)TempData["CreatedOn"]!;
+                    gCBooking.CreatedBy = (string)TempData["CreatedBy"]!;
+
                     _context.Update(gCBooking);
                     await _context.SaveChangesAsync();
+
+                    var transport = _context.LogisticalTransporters.Where(x => x.Id == gCBooking.LogisticalTransporterId).FirstOrDefault()!.Name;
+                    var FPTsite = _context.FPTSites.Where(x => x.Id == gCBooking.FPTSiteId).FirstOrDefault()!.SiteLocation;
+                    var commodity = _context.Commodities.Where(x => x.Id == gCBooking.CommodityId).FirstOrDefault()!.CommodityItem;
+
+                    //Email Notification - Updated Booking
+                    await _emailSender.SendEmailAsync(email, $"{"Updated - General Cargo Booking : " + gCBooking.Date.ToString("dd MMMM yyyy") + " AT " + gCBooking.Time}",
+
+                        $"Booking Reference : <text> {gCBooking.BookingReference}</text>" +
+                        $"<br/>" +
+                        $"<br/>" +
+                        $"Booked Date : <text> {gCBooking.Date.ToString("dd MMMM yyyy")}</text>" +
+                        $"<br/>" +
+                        $"<br/>" +
+                        $"Booked Time : <text> {gCBooking.Time}</text>" +
+                        $"<br/>" +
+                        $"<br/>" +
+                        $"Booked For : <text> {transport + " - " + " Registration : " + gCBooking.Registration}</text>" +
+                        $"<br/>" +
+                        $"<br/>" +
+                        $"FPT Facility  : <text> {FPTsite}</text>" +
+                        $"<br/>" +
+                        $"<br/>" +
+                        $"Commodity & Quantity : <text> {commodity + " , " + gCBooking.Quantity}</text>" +
+                        $"<br/>" +
+                        $"<br/>" +
+                        $"Addtional Comments : <text>{gCBooking.Comments}</text>");
                 }
                 catch (DbUpdateConcurrencyException)
                 {

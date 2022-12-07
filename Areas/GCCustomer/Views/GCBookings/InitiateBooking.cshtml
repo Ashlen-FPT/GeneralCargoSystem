@@ -5,6 +5,7 @@
 
     var stat1 = ViewBag.Status1;
     var stat2 = ViewBag.Status2;
+    var selectedDate = ViewBag.TDate;
 }
 <style>
     #vbooking .mx-auto {
@@ -14,10 +15,11 @@
     #cbooking {
         display: none;
     }
+
 </style>
 <center>
     <heading>
-        <h2>New General Cargo Truck Booking</h2>
+        <h2>Booking Initialization</h2>
     </heading>
 </center>
 <hr />
@@ -31,10 +33,9 @@
                 </heading>
                 <hr />
                 <div>
-
                     <div class="form-group">
                         <label asp-for="Date" class="control-label"></label>
-                        <input asp-for="Date" class="form-control datetime" id="date" value="" min="@DateTime.Now.Date.ToString("yyyy-MM-dd")" />
+                        <input asp-for="Date" class="form-control datetime" id="date" value="@selectedDate" />
                         <span asp-validation-for="Date" class="text-danger"></span>
                     </div>
                 </div>
@@ -53,8 +54,8 @@
 
                     <div class="form-group">
                         <p> 1. Only 30 bookings available for each hour</p>
-                        <p> 2. In order to view <b>specific booking(s)</b> , select a date</p>
-                        <p> 3. Note 3</p>
+                        <p> 2. In order to view <b>specific booking(s)</b> , select a date or type a date</p>
+                        <p> 3. Bookings can only be made from today & onwards</p>
                     </div>
                 </div>
             </div>
@@ -176,151 +177,157 @@
     <script>
         // > Greater
         // < Less
-        $(document).ready(function () {
 
-            var dateInput = document.getElementById('date');
-            const div = document.querySelector("div.col-sm-6 mx-auto");
+        var dateInput = document.getElementById('date');
+        let currentDate = new Date().toJSON().slice(0, 10);
+        const div = document.querySelector("div.col-sm-6 mx-auto");
+        var book = document.getElementById('cbooking');
+        var bookedTime = document.getElementById('bookedTime');
+        var btn = document.getElementById("btnBooking");
+        var sBtn = document.getElementById("btnSpecificBooking");
 
-            var book = document.getElementById('cbooking');
-            var bookedTime = document.getElementById('bookedTime');
-            var btn = document.getElementById("btnBooking");
-            var sBtn = document.getElementById("btnSpecificBooking");
+        let btns = document.querySelectorAll('#btn1,#btn2,#btn3 , #btn4,#btn5 , #btn6 ,#btn7,#btn8,#btn9,#btn10,#btn11,#btn12, #btn13,#btn14,#btn15,#btn16,#btn17,#btn18,#btn19, #btn20,#btn21,#btn22,#btn23,#btn24');
 
-            let btns = document.querySelectorAll('#btn1,#btn2,#btn3 , #btn4,#btn5 , #btn6 ,#btn7,#btn8,#btn9,#btn10,#btn11,#btn12, #btn13,#btn14,#btn15,#btn16,#btn17,#btn18,#btn19, #btn20,#btn21,#btn22,#btn23,#btn24');
+        for (i of btns) {
+            i.addEventListener('click', function () {
 
-            for (i of btns) {
-                i.addEventListener('click', function () {
-
-                    if (dateInput.value != "" && i.classList.contains("btn", "btn-primary", "active")) {
-                        book.style.display = "block";
-                    }
-                });
-            }
-
-          
-
-            //Status - 01:00
-            if (@stat1.Count > 4) {
-
-                document.getElementById("btn1").classList.remove("btn", "btn-primary", "active");
-                document.getElementById("btn1").classList.add("btn", "btn-danger", "active");
-
-                document.getElementById("btn1").addEventListener('click', function handleClick() {
-
-                    book.style.display = "none";
-                });
-            }
-
-            //Status - 02:00
-            if (@stat2.Count > 4) {
-
-                document.getElementById("btn2").classList.remove("btn", "btn-primary", "active");
-                document.getElementById("btn2").classList.add("btn", "btn-danger", "active");
-                document.getElementById("btn2").addEventListener('click', function handleClick() {
-
-                    book.style.display = "none";
-
-                });
-            }
-
-
-
-            $("#date").change((a) => {
-                if (a.target.value) {
+                if (dateInput.value != "" && i.classList.contains("btn", "btn-primary", "active")) {
                     book.style.display = "block";
-
-                    //$.ajax({
-                    //    type: "POST",
-                    //    dataType: 'json',
-                    //    url: "/GCBookings/InitiateBooking?tDate=" + dateInput.value,
-                    //    async: false,
-                    //});
-
-                    console.log(dateInput.value);
-                }
-                else {
-                    book.style.display = "none";
                 }
             });
+        }
 
 
-            $('#btn-group1').click(function () {
-                $('#modelWindow').modal('show');
+
+        //Status - 01:00
+        if (@stat1.Count == 4) {
+
+            document.getElementById("btn1").classList.remove("btn", "btn-primary", "active");
+            document.getElementById("btn1").classList.add("btn", "btn-danger", "active");
+
+            document.getElementById("btn1").addEventListener('click', function handleClick() {
+
+                book.style.display = "none";
             });
-            $('#btn-group2').click(function () {
-                $('#modelWindow').modal('show');
-            });
-            $('#btn-group3').click(function () {
-                $('#modelWindow').modal('show');
-            });
-            $('#btn-group4').click(function () {
-                $('#modelWindow').modal('show');
-            });
+        }
 
-            $('#btnBooking').click(function () {
-                $('#modelWindow').modal('hide');
-            });
+        //Status - 02:00
+        if (@stat2.Count == 4) {
 
+            document.getElementById("btn2").classList.remove("btn", "btn-primary", "active");
+            document.getElementById("btn2").classList.add("btn", "btn-danger", "active");
+            document.getElementById("btn2").addEventListener('click', function handleClick() {
 
-            $('#btnSpecificBooking').click(function () {
-
-                if (dateInput.value == "") {
-
-                    Swal.fire(
-                        'Select A Date',
-                        '',
-                        'error'
-                    )
-                    sBtn.attributes[2].value = false;
-
-                    $('#modelWindow').modal('hide');
-                } else {
-                    sBtn.attributes[2].value = true;
-                    $('#modelWindow').modal('hide');
-                }
-
+                book.style.display = "none";
 
             });
+        }
 
+        $("#date").change((a) => {
+            if (a.target.value) {
+                book.style.display = "block";
 
-            const onClick = function () {
+                location.href = "/GCCustomer/GCBookings/InitiateBooking?queryDate= " + dateInput.value;
 
-                bookedTime.innerHTML = this.innerHTML;
-
-                btn.attributes[3].value = "/GCCustomer/GCBookings/Booking?bDate= " + dateInput.value + "&bTime=" + this.innerHTML;
-
-                sBtn.attributes[3].value = "/GCCustomer/GCBookings/SpecificBooking?sDate= " + dateInput.value + "&sTime=" + this.innerHTML;
-
-                //console.log(btn.attributes[3]);
             }
+            else {
+                book.style.display = "none";
+            }
+        });
 
-            document.getElementById('btn1').onclick = onClick;
-            document.getElementById('btn2').onclick = onClick;
-            document.getElementById('btn3').onclick = onClick;
-            document.getElementById('btn4').onclick = onClick;
-            document.getElementById('btn5').onclick = onClick;
-            document.getElementById('btn6').onclick = onClick;
-            document.getElementById('btn7').onclick = onClick;
-            document.getElementById('btn8').onclick = onClick;
-            document.getElementById('btn9').onclick = onClick;
-            document.getElementById('btn10').onclick = onClick;
-            document.getElementById('btn11').onclick = onClick;
-            document.getElementById('btn12').onclick = onClick;
-            document.getElementById('btn13').onclick = onClick;
-            document.getElementById('btn14').onclick = onClick;
-            document.getElementById('btn15').onclick = onClick;
-            document.getElementById('btn16').onclick = onClick;
-            document.getElementById('btn16').onclick = onClick;
-            document.getElementById('btn17').onclick = onClick;
-            document.getElementById('btn18').onclick = onClick;
-            document.getElementById('btn19').onclick = onClick;
-            document.getElementById('btn20').onclick = onClick;
-            document.getElementById('btn21').onclick = onClick;
-            document.getElementById('btn22').onclick = onClick;
-            document.getElementById('btn23').onclick = onClick;
-            document.getElementById('btn24').onclick = onClick;
+
+        $('#btn-group1').click(function () {
+            $('#modelWindow').modal('show');
+        });
+        $('#btn-group2').click(function () {
+            $('#modelWindow').modal('show');
+        });
+        $('#btn-group3').click(function () {
+            $('#modelWindow').modal('show');
+        });
+        $('#btn-group4').click(function () {
+            $('#modelWindow').modal('show');
+        });
+
+        $('#btnBooking').click(function () {
+
+
+
+            if (dateInput.value < currentDate) {
+
+                Swal.fire(
+                    'Invalid Booking Date',
+                    '',
+                    'warning'
+                )
+                btn.attributes[2].value = false;
+                $('#modelWindow').modal('hide');
+            } else {
+                btn.attributes[2].value = true;
+                $('#modelWindow').modal('hide');
+            }
 
         });
+
+
+        $('#btnSpecificBooking').click(function () {
+
+            if (dateInput.value == "") {
+
+                Swal.fire(
+                    'Select A Date',
+                    '',
+                    'error'
+                )
+                sBtn.attributes[2].value = false;
+
+                $('#modelWindow').modal('hide');
+            } else {
+                sBtn.attributes[2].value = true;
+                $('#modelWindow').modal('hide');
+            }
+
+
+        });
+
+
+        const onClick = function () {
+
+            bookedTime.innerHTML = this.innerHTML;
+
+            btn.attributes[3].value = "/GCCustomer/GCBookings/Booking?bDate= " + dateInput.value + "&bTime=" + this.innerHTML;
+
+            sBtn.attributes[3].value = "/GCCustomer/GCBookings/SpecificBooking?sDate= " + dateInput.value + "&sTime=" + this.innerHTML;
+
+
+            //console.log(btn.attributes[3]);
+        }
+
+        document.getElementById('btn1').onclick = onClick;
+        document.getElementById('btn2').onclick = onClick;
+        document.getElementById('btn3').onclick = onClick;
+        document.getElementById('btn4').onclick = onClick;
+        document.getElementById('btn5').onclick = onClick;
+        document.getElementById('btn6').onclick = onClick;
+        document.getElementById('btn7').onclick = onClick;
+        document.getElementById('btn8').onclick = onClick;
+        document.getElementById('btn9').onclick = onClick;
+        document.getElementById('btn10').onclick = onClick;
+        document.getElementById('btn11').onclick = onClick;
+        document.getElementById('btn12').onclick = onClick;
+        document.getElementById('btn13').onclick = onClick;
+        document.getElementById('btn14').onclick = onClick;
+        document.getElementById('btn15').onclick = onClick;
+        document.getElementById('btn16').onclick = onClick;
+        document.getElementById('btn16').onclick = onClick;
+        document.getElementById('btn17').onclick = onClick;
+        document.getElementById('btn18').onclick = onClick;
+        document.getElementById('btn19').onclick = onClick;
+        document.getElementById('btn20').onclick = onClick;
+        document.getElementById('btn21').onclick = onClick;
+        document.getElementById('btn22').onclick = onClick;
+        document.getElementById('btn23').onclick = onClick;
+        document.getElementById('btn24').onclick = onClick;
     </script>
     <script>
         $.validator.unobtrusive.parse("#bookingForm");
