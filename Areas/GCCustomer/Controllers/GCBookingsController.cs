@@ -16,11 +16,12 @@ using iText.Layout;
 using iText.Layout.Element;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Globalization;
+using System.Text;
 
 namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 {
     [Area("GCCustomer")]
-    [NoDirectAccess]
+    //[NoDirectAccess]
     public class GCBookingsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -92,11 +93,6 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 
         public IActionResult Booking(DateTime bDate, string bTime)
         {
-            int lastAddedId = 0;
-            //var data = _context.GCBookings.Where(x => x.CreatedOn.ToString().Substring(0, 10) == DateTime.Today.AddDays(-1).ToString()).FirstOrDefault()!;
-            //lastAddedId = data.Id;
-            //var trimRef = data.BookingReference.Substring(3,3);
-            //_ = trimRef;
             GCBooking book = new GCBooking();
 
             book.Time = bTime;
@@ -118,7 +114,6 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
         public async Task<IActionResult> Booking(GCBooking gCBooking)
         {
             string referenceGeneration = new Random().Next(1000, 9999).ToString();
-
             //    generatedRef = Convert.ToString(num + 100).PadRight(4, '0');
             var email = User.Identity!.Name!;
             var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
@@ -170,6 +165,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             return View(gCBooking);
         }
 
+        //TODO : PDF Generation
         public IActionResult GCBookingDetails()
         {
             byte[] pdfBytes;

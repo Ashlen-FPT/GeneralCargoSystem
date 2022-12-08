@@ -3,82 +3,106 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+<style>
+    .row {
+        padding-bottom: 15px;
+    }
+</style>
 <div>
-    <h4>General Booking ~ @Model.BookingReference</h4>
+    <center><h4>General Cargo Booking ~ @Model.BookingReference</h4></center>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FPTSites)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FPTSites.SiteLocation)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VesselId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Vessels.VesselName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LogisticalTransporter)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LogisticalTransporter.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Registration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Registration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Commodity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Commodity.CommodityItem)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-    </dl>
-</div>
+    <div class="card">
 
-<div>
-    <form asp-action="GCBookingDetails">
-        <input type="submit" value="Generate PDF" />
-    </form>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>@Html.DisplayNameFor(model => model.Date) :</b>
+                    @Model.Date.ToString("dd MMMM yyyy")
+                </div>
+
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>Booking Time :</b>
+                    @Html.DisplayFor(model => model.Time)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>  FPT Site :</b>
+                    @Html.DisplayFor(model => model.FPTSites.SiteLocation)
+                </div>
+
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>@Html.DisplayNameFor(model => model.VesselId) :</b>
+                    @Html.DisplayFor(model => model.Vessels.VesselName)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>Logistical Transporter :</b>
+                    @Html.DisplayFor(model => model.LogisticalTransporter.Name)
+                </div>
+
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>Transport Registration :</b>
+                    @Html.DisplayFor(model => model.Registration)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>@Html.DisplayNameFor(model => model.Commodity) :</b>
+                    @Html.DisplayFor(model => model.Commodity.CommodityItem)
+                </div>
+
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>@Html.DisplayNameFor(model => model.Quantity) :</b>
+                    @Html.DisplayFor(model => model.Quantity)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>  @Html.DisplayNameFor(model => model.Name) :</b>
+                    @Html.DisplayFor(model => model.Name)
+                </div>
+
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>@Html.DisplayNameFor(model => model.PhoneNumber) :</b>
+                    @Html.DisplayFor(model => model.PhoneNumber)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>  Email Address :</b>
+                    @Html.DisplayFor(model => model.Email)
+                </div>
+
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>  @Html.DisplayNameFor(model => model.Comments) :</b>
+                    @Html.DisplayFor(model => model.Comments)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>  @Html.DisplayNameFor(model => model.CreatedOn) :</b>
+                    @Model.CreatedOn.ToString("dd MMMM yyyy  hh:mm:ss")
+                </div>
+
+                <div class="form-group col-sm-6 mx-auto">
+                    <b> Created By  :</b>
+                    @Html.DisplayFor(model => model.CreatedBy)
+                </div>
+            </div>
+            <div>
+                <form asp-action="GCBookingDetails">
+                    <button class="btn btn-success active" style="float:right;" type="submit">Generate PDF <i class="fa fa-1x fa-file-pdf"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 </div>
