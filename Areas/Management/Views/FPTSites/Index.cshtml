@@ -1,66 +1,104 @@
 ﻿@model IEnumerable<GeneralCargoSystem.Models.GC.FPTSites>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "FPT Sites";
 }
+<style>
+    #myTable {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        background-color: black;
+        border-radius: 12px;
+        color: white;
+    }
 
+        #myTable th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        #myTable th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        /*        #myTable td, #myTable th {
+                            border: 1px solid #ddd;
+                            padding: 8px;
+                        }*/
+
+        #myTable tr:hover {
+            background-color: dodgerblue;
+        }
+
+        #myTable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: deepskyblue;
+            color: white;
+        }
+</style>
 <center>
     <header>
         <h1>Manage FPT Sites <i class="fa fa-warehouse"></i></h1>
     </header>
 </center>
+<div class="card">
+    <div class="card-body">
+        <p style="padding-bottom:60px;">
+            <a class="btn btn-primary active" style="float:right;" data-ajax="true" data-ajax-url="@Url.Action("Create","FPTSites")" data-ajax-success="Modal.PartialView"><i class="fa fa-plus"></i> Add A FPT Site</a>
+        </p>
 
-<p style="padding-bottom:60px;">
-    <a class="btn btn-primary active" style="float:right;" data-ajax="true" data-ajax-url="@Url.Action("Create","FPTSites")" data-ajax-success="Modal.PartialView"><i class="fa fa-plus"></i> Add A FPT Site</a>
-</p>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="p-4 border rounded">
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SiteLocation)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LocationId)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SiteLocation)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LocationId)
+                                    </td>
+                                    <td>
+                                        <center>
+                                            <div class="btn-group dropend">
+                                                <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Expand">Manage FPT Site</button>
+                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
+                                                    <a class="dropdown-item btn btn-success" data-ajax="true" data-ajax-url="@Url.Action("Edit","FPTSites", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-refresh"></i> Update </a>
+                                                    <div style="padding:5px;"></div>
+                                                    <a class="dropdown-item btn btn-danger" data-ajax="true" data-ajax-url="@Url.Action("Delete","FPTSites", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-trash"></i> Remove</a>
+                                                    <div style="padding:5px;"></div>
+                                                    <a class="dropdown-item btn btn-info" data-ajax="true" data-ajax-url="@Url.Action("Details","FPTSites", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-info-circle"></i> More Information</a>
 
-<div class="content">
-    <div class="container-fluid">
-        <div class="p-4 border rounded">
-            <table class="table" id="myTable">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.SiteLocation)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.LocationId)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.SiteLocation)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LocationId)
-                            </td>
-                            <td>
-                                <center>
-                                    <div class="btn-group dropend">
-                                        <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Expand">Manage FPT Site</button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
-                                            <a class="dropdown-item btn btn-success" data-ajax="true" data-ajax-url="@Url.Action("Edit","FPTSites", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-refresh"></i> Update </a>
-                                            <div style="padding:5px;"></div>
-                                            <a class="dropdown-item btn btn-danger" data-ajax="true" data-ajax-url="@Url.Action("Delete","FPTSites", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-trash"></i> Remove</a>
-                                            <div style="padding:5px;"></div>
-                                            <a class="dropdown-item btn btn-info" data-ajax="true" data-ajax-url="@Url.Action("Details","FPTSites", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-info-circle"></i> More Information</a>
-
-                                        </div>
-                                    </div>
-                                </center>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                                </div>
+                                            </div>
+                                        </center>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
 </div>
+</div>
+
 
 @section Scripts{
 

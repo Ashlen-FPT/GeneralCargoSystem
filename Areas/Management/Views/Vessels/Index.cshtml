@@ -3,92 +3,132 @@
 @{
     ViewData["Title"] = "Vessels";
 }
+<style>
+        #myTable {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        background-color: black;
+        border-radius: 12px;
+        color:white;
+    }
+
+        #myTable th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        #myTable th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        /*        #myTable td, #myTable th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }*/
+
+        #myTable tr:hover {
+            background-color: dodgerblue;
+        }
+
+        #myTable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: deepskyblue;
+            color: white;
+        }
+</style>
 <center>
     <header>
         <h1>Manage Vessels <i class="fa fa-ship"></i></h1>
     </header>
 </center>
-<p style="padding-bottom:60px;">
-    <a class="btn btn-primary active" style="float:right;" data-ajax="true" data-ajax-url="@Url.Action("Create","Vessels")" data-ajax-success="Modal.PartialView"><i class="fa fa-plus"></i> Add A Vessel</a>
-</p>
-<div class="content">
-    <div class="container-fluid">
-        <div class="p-4 border rounded">
-            <table id="myTable" class="table">
-                <thead class="thead-dark">
-                    <tr class="table-info">
-                        <th>
-                            @Html.DisplayNameFor(model => model.VesselName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.VesselNo)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.VoyageNo)
-                        </th>
-                        <th>
-                            Vessel Status
-                        </th>
-                        <th>
-                            <center>Manage Vessel</center>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.VesselName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.VesselNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.VoyageNo)
-                            </td>
-                            <td>
-                                @*@Html.DisplayFor(modelItem => item.IsActive)*@
-                                @if (item.IsActive == false)
-                                {
-                                    <div>
-                                        <a class="btn btn-danger text-black" style="cursor:pointer;" title="@Html.DisplayFor(modelItem => item.VesselName) Inactive">
-                                            <i class="fas fa-times"></i>
-                                        </a>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div>
-                                        <a class="btn btn-success text-black" style="cursor:pointer;" title="@Html.DisplayFor(modelItem => item.VesselName) Active">
-                                            <i class="fas fa-check"></i>
-                                        </a>
-                                    </div>
-                                }
-                            </td>
-                            <td>
-                                <center>
-                                    <div class="btn-group dropend">
-                                        <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Expand">Manage This Vessel</button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
-                                            <a class="dropdown-item btn btn-success" data-ajax="true" data-ajax-url="@Url.Action("Edit","Vessels", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-refresh"></i> Update </a>
-                                            <div style="padding:5px;"></div>
-                                           @* <a class="dropdown-item btn btn-danger" data-ajax="true" data-ajax-url="@Url.Action("Delete","Vessels", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-trash"></i> Remove 1</a>*@
-                                            <button data-id="@item.Id" type="button" class="dropdown-item btn btn-danger btnDelete"><i class=" fa fa-trash"></i> Remove </button>
-                                            <div style="padding:5px;"></div>
-                                            <a  class="dropdown-item btn btn-info" data-ajax="true" data-ajax-url="@Url.Action("Details","Vessels", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-info-circle"></i> More Information</a>
+<div class="card">
+    <div class="card-body">
+        <p style="padding-bottom:60px;">
+            <a class="btn btn-primary active" style="float:right;" data-ajax="true" data-ajax-url="@Url.Action("Create","Vessels")" data-ajax-success="Modal.PartialView"><i class="fa fa-plus"></i> Add A Vessel</a>
+        </p>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="p-4 border rounded">
+                    <table id="myTable" class="table">
+                        <thead class="thead-dark">
+                            <tr class="table-info">
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VesselName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VesselNo)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VoyageNo)
+                                </th>
+                                <th>
+                                    Vessel Status
+                                </th>
+                                <th>
+                                    <center>Manage Vessel</center>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.VesselName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.VesselNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.VoyageNo)
+                                    </td>
+                                    <td>
+                                        @*@Html.DisplayFor(modelItem => item.IsActive)*@
+                                        @if (item.IsActive == false)
+                                        {
+                                            <div>
+                                                <a class="btn btn-danger text-black" style="cursor:pointer;" title="@Html.DisplayFor(modelItem => item.VesselName) Inactive">
+                                                    <i class="fas fa-times"></i>
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div>
+                                                <a class="btn btn-success text-black" style="cursor:pointer;" title="@Html.DisplayFor(modelItem => item.VesselName) Active">
+                                                    <i class="fas fa-check"></i>
+                                                </a>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <center>
+                                            <div class="btn-group dropend">
+                                                <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Expand">Manage This Vessel</button>
+                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
+                                                    <a class="dropdown-item btn btn-success" data-ajax="true" data-ajax-url="@Url.Action("Edit","Vessels", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-refresh"></i> Update </a>
+                                                    <div style="padding:5px;"></div>
+                                                    @* <a class="dropdown-item btn btn-danger" data-ajax="true" data-ajax-url="@Url.Action("Delete","Vessels", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-trash"></i> Remove 1</a>*@
+                                                    <button data-id="@item.Id" type="button" class="dropdown-item btn btn-danger btnDelete"><i class=" fa fa-trash"></i> Remove </button>
+                                                    <div style="padding:5px;"></div>
+                                                    <a class="dropdown-item btn btn-info" data-ajax="true" data-ajax-url="@Url.Action("Details","Vessels", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-info-circle"></i> More Information</a>
 
-                                        </div>
-                                    </div>
-                                </center>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                                </div>
+                                            </div>
+                                        </center>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 <form id="deleteForm" asp-action="Delete">
     <input type="hidden" id="vesselId" name="Id" />

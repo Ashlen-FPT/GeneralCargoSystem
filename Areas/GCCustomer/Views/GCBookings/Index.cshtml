@@ -5,7 +5,41 @@
 
     var FilteredDate = ViewBag.FDate;
 }
+<style>
+    #myTable {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        background-color: black;
+        border-radius: 12px;
+        color:white;
+    }
 
+        #myTable th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        #myTable th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        /*        #myTable td, #myTable th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }*/
+
+        #myTable tr:hover {
+            background-color: dodgerblue;
+        }
+
+        #myTable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: deepskyblue;
+            color: white;
+        }
+</style>
 <center>
     <header>
         <h1>Manage & View All Bookings <i class="fa fa-table"></i></h1>
@@ -13,83 +47,90 @@
 </center>
 <br />
 <br />
-<div>
-    <div class="form-group">
-        <label class="control-label">Filter By Date:</label>
-        <input class="form-control" type="date" id="date" value="@FilteredDate" />
-        <br />
-        <button id ="clear" style="float:right;"class="btn btn-danger"onclick="javascript:date.value=''">Clear Filter</button>
-    </div>
-</div>
-<br />
-<br />
-<br />
-<div class="content">
-    <div class="container-fluid">
-        <div class="p-4 border rounded">
-            <table class="table" id="myTable">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.BookingReference)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Date)
-                        </th>
-                        <th>
-                            Booked Time
-                        </th>
-                        <th>
-                            FPT Site
-                        </th>
-                        <th>
-                            Logistical Transporter
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.BookingReference)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Date)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Time)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FPTSites.SiteLocation)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LogisticalTransporter.Name)
-                            </td>
-                            <td>
-                                <center>
-                                    <div class="btn-group dropend">
-                                        <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Expand">Manage Booking</button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
-                                            <a class="dropdown-item btn btn-success" data-ajax="true" data-ajax-url="@Url.Action("Edit","GCBookings", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-refresh"></i> Update </a>
-                                            <div style="padding:5px;"></div>
-                                            @* <a class="dropdown-item btn btn-danger" data-ajax="true" data-ajax-url="@Url.Action("Delete","Vessels", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-trash"></i> Remove 1</a>*@
-                                            <button data-id="@item.Id" type="button" class="dropdown-item btn btn-danger btnDelete"><i class=" fa fa-trash"></i> Remove </button>
-                                            <div style="padding:5px;"></div>
-                                            <a class="dropdown-item btn btn-info" data-ajax="true" data-ajax-url="@Url.Action("Details","GCBookings", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-info-circle"></i> More Information</a>
+<div class="card">
+    <div class="card-body">
 
-                                        </div>
-                                    </div>
-                                </center>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div>
+            <div class="form-group">
+                <label class="control-label">Filter By Date:</label>
+                <input class="form-control" type="date" id="date" value="@FilteredDate" />
+                <br />
+                <button id="clear" style="float:right;" class="btn btn-danger" onclick="javascript:date.value=''">Clear Filter</button>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div class="content">
+            <div class="container-fluid">
+                <div class="p-4 border rounded">
+                    <table class="table" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.BookingReference)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Date)
+                                </th>
+                                <th>
+                                    Booked Time
+                                </th>
+                                <th>
+                                    FPT Site
+                                </th>
+                                <th>
+                                    Logistical Transporter
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BookingReference)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Time)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FPTSites.SiteLocation)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LogisticalTransporter.Name)
+                                    </td>
+                                    <td>
+                                        <center>
+                                            <div class="btn-group dropend">
+                                                <button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Expand">Manage Booking</button>
+                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop">
+                                                    <a class="dropdown-item btn btn-success" data-ajax="true" data-ajax-url="@Url.Action("Edit","GCBookings", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-refresh"></i> Update </a>
+                                                    <div style="padding:5px;"></div>
+                                                    @* <a class="dropdown-item btn btn-danger" data-ajax="true" data-ajax-url="@Url.Action("Delete","Vessels", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-trash"></i> Remove 1</a>*@
+                                                    <button data-id="@item.Id" type="button" class="dropdown-item btn btn-danger btnDelete"><i class=" fa fa-trash"></i> Remove </button>
+                                                    <div style="padding:5px;"></div>
+                                                    <a class="dropdown-item btn btn-info" data-ajax="true" data-ajax-url="@Url.Action("Details","GCBookings", new {id = item.Id})" data-ajax-success="Modal.PartialView"><i class=" fa fa-info-circle"></i> More Information</a>
+
+                                                </div>
+                                            </div>
+                                        </center>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
+
 <form id="deleteForm" asp-action="Delete">
     <input type="hidden" id="bookingId" name="Id" />
 </form>
