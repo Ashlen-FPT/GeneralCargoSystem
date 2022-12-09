@@ -165,7 +165,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
                 };
                 _context.Logs.Add(log);
                 await _context.SaveChangesAsync();
-                TempData["Create"] = "Vessel Created !";
+                TempData["Create"] = "Vessel Created";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -233,7 +233,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
                 };
                 _context.Logs.Add(log);
                 _context.SaveChanges();
-                TempData["Update"] = "Vessel Updated !";
+                TempData["Update"] = "Vessel Updated";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -286,7 +286,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             };
             _context.Logs.Add(log);
             await _context.SaveChangesAsync();
-            TempData["Delete"] = "Vessel Deleted !";
+            TempData["Delete"] = "Vessel Deleted";
             return RedirectToAction(nameof(Index));
         }
 

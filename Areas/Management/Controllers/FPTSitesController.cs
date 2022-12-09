@@ -105,7 +105,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             {
                 _context.Add(fPTSites);
                 await _context.SaveChangesAsync();
-                TempData["Create"] = "FPT Site Created !";
+                TempData["Create"] = "FPT Site Created";
                 return RedirectToAction(nameof(Index));
             }
             return View(fPTSites);
@@ -158,7 +158,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
                         throw;
                     }
                 }
-                TempData["Update"] = "FPT Site Updated !";
+                TempData["Update"] = "FPT Site Updated";
                 return RedirectToAction(nameof(Index));
             }
             return View(fPTSites);
@@ -199,7 +199,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             }
             
             await _context.SaveChangesAsync();
-            TempData["Delete"] = "FPT Site Deleted !";
+            TempData["Delete"] = "FPT Site Deleted";
             return RedirectToAction(nameof(Index));
         }
 

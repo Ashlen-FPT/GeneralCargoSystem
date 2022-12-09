@@ -64,6 +64,8 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                 return View(filteredList);
 
             }
+            ViewBag.Updated = TempData["Update"] as string;
+            ViewBag.Deleted = TempData["Delete"] as string;
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -231,34 +233,6 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             return View(gCBooking);
         }
 
-        // GET: GCCustomer/GCBookings/Create
-        public IActionResult Create()
-        {
-            ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem");
-            ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation");
-            ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name");
-            return PartialView();
-        }
-
-        // POST: GCCustomer/GCBookings/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(/*[Bind("Id,BookingReference,Date,FPTSiteId,VesselId,LogisticalTransporterId,Registration,Quantity,CommodityId,Name,PhoneNumber,Email,CreatedOn")]*/ GCBooking gCBooking)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(gCBooking);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem", gCBooking.CommodityId);
-            ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "LocationId", gCBooking.FPTSiteId);
-            ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name", gCBooking.LogisticalTransporterId);
-            return View(gCBooking);
-        }
-
         // GET: GCCustomer/GCBookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -317,7 +291,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                     var commodity = _context.Commodities.Where(x => x.Id == gCBooking.CommodityId).FirstOrDefault()!.CommodityItem;
 
                     //Email Notification - Updated Booking
-                    await _emailSender.SendEmailAsync(email, $"{"Updated - General Cargo Booking : " + gCBooking.Date.ToString("dd MMMM yyyy") + " AT " + gCBooking.Time}",
+                    await _emailSender.SendEmailAsync(email, $"{"Updated ~ "+DateTime.Now.ToString("dd MMMM yyyy HH:mm:ss")+" - General Cargo Booking : " + gCBooking.Date.ToString("dd MMMM yyyy") + " AT " + gCBooking.Time}",
 
                         $"Booking Reference : <text> {gCBooking.BookingReference}</text>" +
                         $"<br/>" +
@@ -350,6 +324,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                         throw;
                     }
                 }
+                TempData["Update"] = "General Cargo Booking Updated";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CommodityId"] = new SelectList(_context.Commodities, "Id", "CommodityItem", gCBooking!.CommodityId);
@@ -396,6 +371,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["Delete"] = "General Cargo Booking Deleted";
             return RedirectToAction(nameof(Index));
         }
 

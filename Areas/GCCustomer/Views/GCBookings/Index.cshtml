@@ -97,6 +97,8 @@
 <script type="text/javascript" src="~/lib/datatables/jquery-3.6.0.js"></script>
 <link type="text/css" href="~/lib/datatables/datatables.min.css" rel="stylesheet">
 <script type="text/javascript" src="~/lib/datatables/datatables.js"></script>
+<script src="~/lib/sweetalert2-11.5.1/js/sweetalert2.all.js"></script>
+
 <script>
     $(document).ready(function () {
         var dateInput = document.getElementById('date');
@@ -163,4 +165,27 @@
             });
         });
     });
+
+    //Read Update Message
+    var updated = "@((string)ViewBag.Updated)";
+
+    if (updated !== null && updated !== '') {
+        Swal.fire(
+            updated,
+            '',
+            'success',
+
+        )
+    }
+
+    //Read Delete Message
+    var deleted = "@((string)ViewBag.Deleted)";
+
+    if (deleted !== null && deleted !== '') {
+        Swal.fire(
+            deleted,
+            '',
+            'success'
+        )
+    }
 </script>

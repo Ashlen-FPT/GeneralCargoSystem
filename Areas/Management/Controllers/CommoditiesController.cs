@@ -89,7 +89,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             {
                 _context.Add(commodity);
                 await _context.SaveChangesAsync();
-                TempData["Create"] = "Commodity Created !";
+                TempData["Create"] = "Commodity Created";
                 return RedirectToAction(nameof(Index));
             }
             return View(commodity);
@@ -142,7 +142,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
                         throw;
                     }
                 }
-                TempData["Update"] = "Commodity Updated !";
+                TempData["Update"] = "Commodity Updated";
                 return RedirectToAction(nameof(Index));
             }
             return View(commodity);
@@ -183,7 +183,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             }
             
             await _context.SaveChangesAsync();
-            TempData["Delete"] = "Commodity Deleted !";
+            TempData["Delete"] = "Commodity Deleted";
             return RedirectToAction(nameof(Index));
         }
 

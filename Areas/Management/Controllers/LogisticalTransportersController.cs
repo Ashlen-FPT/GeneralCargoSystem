@@ -106,7 +106,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             {
                 _context.Add(logisticalTransporter);
                 await _context.SaveChangesAsync();
-                TempData["Create"] = "Logistical Transporter Created !";
+                TempData["Create"] = "Logistical Transporter Created";
                 return RedirectToAction(nameof(Index));
             }
             return View(logisticalTransporter);
@@ -159,7 +159,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
                         throw;
                     }
                 }
-                TempData["Update"] = "Logistical Transporter Updated !";
+                TempData["Update"] = "Logistical Transporter Updated";
                 return RedirectToAction(nameof(Index));
             }
             return View(logisticalTransporter);
@@ -200,7 +200,7 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
             }
             
             await _context.SaveChangesAsync();
-            TempData["Delete"] = "Logistical Transporter Deleted !";
+            TempData["Delete"] = "Logistical Transporter Deleted";
             return RedirectToAction(nameof(Index));
         }
 
