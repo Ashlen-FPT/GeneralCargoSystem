@@ -17,6 +17,8 @@ using iText.Layout.Element;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Globalization;
 using System.Text;
+using GeneralCargoSystem.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 {
@@ -71,13 +73,64 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 
         public IActionResult InitiateBooking(DateTime queryDate)
         {
+            #region Statuses
             var status_1 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "01:00").ToList();
             var status_2 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "02:00").ToList();
-            string date = "0001/01/01";
+            var status_3 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "03:00").ToList();
+            var status_4 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "04:00").ToList();
+            var status_5 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "05:00").ToList();
+            var status_6 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "06:00").ToList();
+            var status_7 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "07:00").ToList();
+            var status_8 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "08:00").ToList();
+            var status_9 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "09:00").ToList();
+            var status_10 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "10:00").ToList();
+            var status_11 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "11:00").ToList();
+            var status_12 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "12:00").ToList();
+
+            var status_13 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "13:00").ToList();
+            var status_14 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "14:00").ToList();
+            var status_15 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "15:00").ToList();
+            var status_16 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "16:00").ToList();
+            var status_17 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "17:00").ToList();
+            var status_18 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "18:00").ToList();
+            var status_19 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "19:00").ToList();
+            var status_20 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "20:00").ToList();
+            var status_21 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "21:00").ToList();
+            var status_22 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "22:00").ToList();
+            var status_23 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "23:00").ToList();
+            var status_24 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "00:00").ToList();
+
+
 
             ViewBag.Status1 = status_1;
             ViewBag.Status2 = status_2;
+            ViewBag.Status3 = status_3;
+            ViewBag.Status4 = status_4;
+            ViewBag.Status5 = status_5;
+            ViewBag.Status6 = status_6;
+            ViewBag.Status7 = status_7;
+            ViewBag.Status8 = status_8;
+            ViewBag.Status9 = status_9;
+            ViewBag.Status10 = status_10;
+            ViewBag.Status11 = status_11;
+            ViewBag.Status12 = status_12;
 
+            ViewBag.Status13 = status_13;
+            ViewBag.Status14 = status_14;
+            ViewBag.Status15 = status_15;
+            ViewBag.Status16 = status_16;
+            ViewBag.Status17 = status_17;
+            ViewBag.Status18 = status_18;
+            ViewBag.Status19 = status_19;
+            ViewBag.Status20 = status_20;
+            ViewBag.Status21 = status_21;
+            ViewBag.Status22 = status_22;
+            ViewBag.Status23 = status_23;
+            ViewBag.Status24 = status_24;
+
+            #endregion
+
+            string date = "0001/01/01";
             if (queryDate != Convert.ToDateTime(date))
             {
                 ViewBag.TDate = queryDate.ToString("yyyy-MM-dd");
@@ -166,8 +219,47 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name", gCBooking.LogisticalTransporterId);
             return View(gCBooking);
         }
+        public async Task SendViaEmail(int? id, string email)
+        {
 
-        //TODO : PDF Generation
+            //ApplicationUser applicationUser = (ApplicationUser)await _userManager.GetUserAsync(User);
+            //string FirstName = applicationUser?.FirstName;
+
+            var gCBooking = await _context.GCBookings.Include(g => g.Commodity)
+                .Include(g => g.FPTSites).Include(g => g.LogisticalTransporter)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            var transport = _context.LogisticalTransporters.Where(x => x.Id == gCBooking!.LogisticalTransporterId).FirstOrDefault()!.Name;
+            var FPTsite = _context.FPTSites.Where(x => x.Id == gCBooking!.FPTSiteId).FirstOrDefault()!.SiteLocation;
+            var commodity = _context.Commodities.Where(x => x.Id == gCBooking!.CommodityId).FirstOrDefault()!.CommodityItem;
+
+            var toAddress = email;
+            var subject = "Booking Reference : " + gCBooking!.BookingReference;
+            var body = $"Booked Date : <text> {gCBooking.Date.ToString("dd MMMM yyyy")}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Booked Time : <text> {gCBooking.Time}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Booked For : <text> {transport + " - " + " Registration : " + gCBooking.Registration}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"FPT Facility  : <text> {FPTsite}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Commodity & Quantity : <text> {commodity + " , " + gCBooking.Quantity}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Addtional Comments : <text>{gCBooking.Comments}</text>";
+
+
+            await _emailSender.SendEmailAsync(toAddress, subject, body);
+
+
+
+        }
+
+        //TODO : Print
         public IActionResult GCBookingDetails()
         {
             byte[] pdfBytes;
@@ -291,7 +383,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                     var commodity = _context.Commodities.Where(x => x.Id == gCBooking.CommodityId).FirstOrDefault()!.CommodityItem;
 
                     //Email Notification - Updated Booking
-                    await _emailSender.SendEmailAsync(email, $"{"Updated ~ "+DateTime.Now.ToString("dd MMMM yyyy HH:mm:ss")+" - General Cargo Booking : " + gCBooking.Date.ToString("dd MMMM yyyy") + " AT " + gCBooking.Time}",
+                    await _emailSender.SendEmailAsync(email, $"{"Updated ~ " + DateTime.Now.ToString("dd MMMM yyyy HH:mm:ss") + " - General Cargo Booking : " + gCBooking.Date.ToString("dd MMMM yyyy") + " AT " + gCBooking.Time}",
 
                         $"Booking Reference : <text> {gCBooking.BookingReference}</text>" +
                         $"<br/>" +

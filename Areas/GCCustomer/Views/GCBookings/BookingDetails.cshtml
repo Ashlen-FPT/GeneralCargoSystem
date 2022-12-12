@@ -4,10 +4,11 @@
     ViewData["Title"] = "Details";
 }
 <style>
-    .row{
-        padding-bottom:15px;
+    .row {
+        padding-bottom: 15px;
     }
-    #detailsPage{
+
+    #detailsPage {
         padding-top: 90px;
     }
 </style>
@@ -28,7 +29,7 @@
                     @Html.DisplayFor(model => model.Time)
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="form-group col-sm-4 mx-auto">
                     <b>  FPT Site :</b>
@@ -98,15 +99,53 @@
                     @Html.DisplayFor(model => model.CreatedBy)
                 </div>
             </div>
+
             <div>
-                <form asp-action="GCBookingDetails">
-                    <button class="btn btn-success active"style="float:right;"type="submit">Generate PDF <i class="fa fa-1x fa-file-pdf"></i></button>
-                </form>
+                <a class="btn btn-info active" style="float:right;" onclick="sendEmail()">Share Via Email <i class="fa fa-1x fa-share"></i></a>
+                <a class="btn btn-dark active" style="float:right;" type="submit">Print Booking Details <i class="fa fa-1x fa-print"></i></a>
             </div>
         </div>
     </div>
 
 
 </div>
+<script>
+    function sendEmail() {
+
+        swal.fire({
+            title: 'Type email address',
+            input: 'text',
+            confirmButtonText: 'Send',
+        }).then((result) => {
+            if (!result) {
+                swal.close();
+                return null;
+            };
+            console.log(result.value)
+            var uri = "/GCCustomer/GCBookings/SendViaEmail?id=" + @Model.Id + "&email=" + result.value;
+            var res = encodeURI(uri);
+            $.ajax({
+                url: res,
+                success: function (response) {
+                    swal.close();
+                    swal.fire({
+                        title: "Email Sent!",
+                        text: "Please check your inbox",
+                        icon: "success",
+                        button: "Okay",
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    swal.fire({
+                        title: "Error!",
+                        text: " Please try again! , only organizational emails allowed",
+                        icon: "warning",
+                        button: "Okay",
+                    });
+                }
+            });
+        });
+    }
+</script>
 
 
