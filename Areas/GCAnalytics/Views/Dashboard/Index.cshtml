@@ -4,23 +4,43 @@
     var bookingsToday = ViewBag.Bookings;
 }
 <style>
-    /*    .card {
-                              width: 400px;
-                                height: 400px;
-             },*/
+    #myTable {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        background-color: yellowgreen;
+        border-radius: 12px;
+        color: white;
+    }
+
+        #myTable th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        #myTable th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        /*        #myTable td, #myTable th {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }*/
+
+        #myTable tr:hover {
+            background-color: dodgerblue;
+        }
+
+        #myTable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: deepskyblue;
+            color: white;
+        }
 </style>
 <center>
     <header style="padding-top:20px;">
     </header>
-@*    <div class="card">
-        <div class="card-body">
-            <heading>
-                <h1>Bookings Today</h1>
-            </heading>
-            <hr />
-            @bookingsToday.Count
-        </div>
-    </div>*@
     <div>
         <div class="card">
             <div class="card-body">
@@ -50,7 +70,7 @@
                                 <th>
                                     Transporter Registration
                                 </th>
-                                <th></th>
+                            
                             </tr>
                         </thead>
                         <tbody>

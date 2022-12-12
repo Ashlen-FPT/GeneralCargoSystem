@@ -180,11 +180,14 @@
 
         var dateInput = document.getElementById('date');
         let currentDate = new Date().toJSON().slice(0, 10);
+        let getTime = new Date();
+        var currentTime = getTime.getHours() + ":" + getTime.getMinutes();
         const div = document.querySelector("div.col-sm-6 mx-auto");
         var book = document.getElementById('cbooking');
         var bookedTime = document.getElementById('bookedTime');
         var btn = document.getElementById("btnBooking");
         var sBtn = document.getElementById("btnSpecificBooking");
+        var time;
 
         let btns = document.querySelectorAll('#btn1,#btn2,#btn3 , #btn4,#btn5 , #btn6 ,#btn7,#btn8,#btn9,#btn10,#btn11,#btn12, #btn13,#btn14,#btn15,#btn16,#btn17,#btn18,#btn19, #btn20,#btn21,#btn22,#btn23,#btn24');
 
@@ -196,6 +199,7 @@
                 }
             });
         }
+
 
 
 
@@ -294,13 +298,32 @@
         const onClick = function () {
 
             bookedTime.innerHTML = this.innerHTML;
-
+            time = this.innerHTML;
             btn.attributes[3].value = "/GCCustomer/GCBookings/Booking?bDate= " + dateInput.value + "&bTime=" + this.innerHTML;
 
             sBtn.attributes[3].value = "/GCCustomer/GCBookings/SpecificBooking?sDate= " + dateInput.value + "&sTime=" + this.innerHTML;
 
 
-            //console.log(btn.attributes[3]);
+
+            if (dateInput.value === currentDate) {
+
+                $('#btnBooking').click(function () {
+                    if (time < currentTime) {
+
+                        Swal.fire(
+                            'Invalid Booking Time',
+                            '',
+                            'warning'
+                        )
+                        btn.attributes[2].value = false;
+                        $('#modelWindow').modal('hide');
+                    } else {
+                        btn.attributes[2].value = true;
+                        $('#modelWindow').modal('hide');
+                    }
+                });
+
+            }
         }
 
         document.getElementById('btn1').onclick = onClick;
