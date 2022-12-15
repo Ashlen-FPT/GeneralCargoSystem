@@ -8,37 +8,49 @@
 <div>
     <h4>Vessel Information</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.VesselName) :
-        </dt>
-        <dd class="col-sm-5">
-            @Html.DisplayFor(model => model.VesselName)
-        </dd>
-        <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.VesselNo) :
-        </dt>
-        <dd class="col-sm-5">
-            @Html.DisplayFor(model => model.VesselNo)
-        </dd>
-        <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.VoyageNo) :
-        </dt>
-        <dd class="col-sm-5">
-            @Html.DisplayFor(model => model.VoyageNo)
-        </dd>
-        <dt class="col-sm-4">
-            Vessel Active :
-        </dt>
-        <dd class="col-sm-5">
-            @if (Model.IsActive == true)
-            {
-                <p>Yes</p>
-            }
-            else
-            {
-                <p>No</p>
-            }
-        </dd>
-    </dl>
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.VesselName) :
+                </dt>
+                <dd class="col-sm-5">
+                    @Html.DisplayFor(model => model.VesselName)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.VesselNo) :
+                </dt>
+                <dd class="col-sm-5">
+                    @if (Model.VesselNo == "" || Model.VesselNo == null)
+                    {
+                        <p>N/A</p>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(model => model.VesselNo)
+                    }
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.VoyageNo) :
+                </dt>
+                <dd class="col-sm-5">
+                    @Html.DisplayFor(model => model.VoyageNo)
+                </dd>
+                <dt class="col-sm-4">
+                    Vessel Active :
+                </dt>
+                <dd class="col-sm-5">
+                    @if (Model.IsActive == true)
+                    {
+                        <p>Yes</p>
+                    }
+                    else
+                    {
+                        <p>No</p>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+
 </div>

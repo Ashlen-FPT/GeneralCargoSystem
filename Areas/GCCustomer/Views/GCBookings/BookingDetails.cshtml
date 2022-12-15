@@ -9,10 +9,22 @@
     }
 
     #detailsPage {
-        padding-top: 90px;
+        padding-top: 60px;
+    }
+
+    .my-validation-message::before {
+        display: none;
+    }
+
+    .my-validation-message i {
+        margin: 0 .4em;
+        color: #f27474;
+        font-size: 1.4em;
     }
 </style>
+<center><h1>General Cargo Trucking Booking Details</h1></center>
 <div id="detailsPage">
+
     <div class="card">
 
         <div class="card-body">
@@ -99,6 +111,15 @@
                     @Html.DisplayFor(model => model.CreatedBy)
                 </div>
             </div>
+            <div class="row">
+                <div class="form-group col-sm-4 mx-auto">
+                    <b>  @Html.DisplayNameFor(model => model.Trade) :</b>
+                    @Html.DisplayFor(model => model.Trade)
+                </div>
+
+                <div class="form-group col-sm-4 mx-auto">
+                </div>
+            </div>
 
             <div>
                 <a class="btn btn-info active" style="float:right;" onclick="sendEmail()">Share Via Email <i class="fa fa-1x fa-share"></i></a>
@@ -117,6 +138,16 @@
             input: 'text',
             inputPlaceholder: 'Email Address',
             confirmButtonText: 'Send',
+            customClass: {
+                validationMessage: 'my-validation-message'
+            },
+            preConfirm: (result) => {
+                if (!result) {
+                    Swal.showValidationMessage(
+                        '<i class="fa fa-info-circle"></i> Email address is required'
+                    )
+                }
+            }
         }).then((result) => {
             if (!result) {
                 swal.close();
@@ -131,7 +162,7 @@
                     swal.close();
                     swal.fire({
                         title: "Email Sent!",
-                        text: "Please check your inbox",
+                        text: "Booking details sent to recipient ",
                         icon: "success",
                         button: "Okay",
                     });

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Booking";
 }
 <style>
-       .modal-dialog {
+    .modal-dialog {
         overflow-y: initial !important
     }
 
@@ -65,12 +65,12 @@
         <div class="row">
             <div class="form-group col-sm-6 mx-auto">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control"  />
+                <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group col-sm-6 mx-auto">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control"  />
+                <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
         </div>
@@ -78,7 +78,7 @@
         <div class="row">
             <div class="form-group col-sm-6 mx-auto">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control"  />
+                <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
@@ -92,8 +92,16 @@
         </div>
         <br />
         <div class="form-group">
+            <label class="control-label">Import/Export</label>
+            <select asp-for="Trade" class="form-control form-select" asp-items="ViewBag.Trade">
+                <option value="">Select Commodity Trade</option>
+            </select>
+            <span asp-validation-for="Trade" class="text-danger"></span>
+        </div>
+        <br />
+        <div class="form-group">
             @*<label asp-for="VesselId" class="control-label"></label>*@
-            <label class="control-label"> Vessel Commodity Origination</label>
+            <label class="control-label">Vessel</label>
             <select asp-for="VesselId" class="form-control form-select" asp-items="ViewBag.VesselId">
                 <option value="">Select Vessel</option>
             </select>
@@ -112,9 +120,9 @@
 </div>
 
 
-    <script>
-        $.validator.unobtrusive.parse("#bookingForm");
-    </script>
+<script>
+    $.validator.unobtrusive.parse("#bookingForm");
+</script>
 @section Scripts {
 
     @{

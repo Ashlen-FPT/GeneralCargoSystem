@@ -74,31 +74,31 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
         public IActionResult InitiateBooking(DateTime queryDate)
         {
             #region Statuses
-            var status_1 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "01:00").ToList();
-            var status_2 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "02:00").ToList();
-            var status_3 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "03:00").ToList();
-            var status_4 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "04:00").ToList();
-            var status_5 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "05:00").ToList();
-            var status_6 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "06:00").ToList();
-            var status_7 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "07:00").ToList();
-            var status_8 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "08:00").ToList();
-            var status_9 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "09:00").ToList();
-            var status_10 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "10:00").ToList();
-            var status_11 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "11:00").ToList();
-            var status_12 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "12:00").ToList();
+            var status_1 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "01:00").Count();
+            var status_2 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "02:00").Count();
+            var status_3 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "03:00").Count();
+            var status_4 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "04:00").Count();
+            var status_5 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "05:00").Count();
+            var status_6 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "06:00").Count();
+            var status_7 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "07:00").Count();
+            var status_8 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "08:00").Count();
+            var status_9 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "09:00").Count();
+            var status_10 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "10:00").Count();
+            var status_11 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "11:00").Count();
+            var status_12 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "12:00").Count();
 
-            var status_13 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "13:00").ToList();
-            var status_14 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "14:00").ToList();
-            var status_15 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "15:00").ToList();
-            var status_16 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "16:00").ToList();
-            var status_17 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "17:00").ToList();
-            var status_18 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "18:00").ToList();
-            var status_19 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "19:00").ToList();
-            var status_20 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "20:00").ToList();
-            var status_21 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "21:00").ToList();
-            var status_22 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "22:00").ToList();
-            var status_23 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "23:00").ToList();
-            var status_24 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "00:00").ToList();
+            var status_13 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "13:00").Count();
+            var status_14 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "14:00").Count();
+            var status_15 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "15:00").Count();
+            var status_16 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "16:00").Count();
+            var status_17 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "17:00").Count();
+            var status_18 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "18:00").Count();
+            var status_19 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "19:00").Count();
+            var status_20 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "20:00").Count();
+            var status_21 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "21:00").Count();
+            var status_22 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "22:00").Count();
+            var status_23 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "23:00").Count();
+            var status_24 = _context.GCBookings.Where(x => x.Date == queryDate && x.Time == "00:00").Count();
 
 
 
@@ -160,6 +160,11 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation");
             ViewData["VesselId"] = new SelectList(_context.Vessels, "Id", "VesselName");
             ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name");
+            ViewData["Trade"] = new SelectList(
+                new List<SelectListItem>
+                {
+                new SelectListItem{Text="Import" , Value="Import"},  new SelectListItem{Text="Export" , Value="Export"}
+                }, "Value", "Text");
 
             return PartialView(book);
         }
@@ -209,6 +214,9 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                     $"Commodity & Quantity : <text> {commodity + " , " + gCBooking.Quantity}</text>" +
                     $"<br/>" +
                     $"<br/>" +
+                    $"Trade Type : <text>{gCBooking.Trade}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
                     $"Addtional Comments : <text>{gCBooking.Comments}</text>");
 
                 return RedirectToAction(nameof(BookingDetails), new { id = gCBooking.Id });
@@ -217,6 +225,11 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation", gCBooking.FPTSiteId);
             ViewData["VesselId"] = new SelectList(_context.Vessels, "Id", "VesselName", gCBooking.VesselId);
             ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name", gCBooking.LogisticalTransporterId);
+            ViewData["Trade"] = new SelectList(
+    new List<SelectListItem>
+    {
+                new SelectListItem{Text="Import" , Value="Import"},  new SelectListItem{Text="Export" , Value="Export"}
+    }, "Value", "Text");
             return View(gCBooking);
         }
         public async Task SendViaEmail(int? id, string email)
@@ -248,6 +261,9 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                     $"<br/>" +
                     $"<br/>" +
                     $"Commodity & Quantity : <text> {commodity + " , " + gCBooking.Quantity}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Trade Type : <text>{gCBooking.Trade}</text>" +
                     $"<br/>" +
                     $"<br/>" +
                     $"Addtional Comments : <text>{gCBooking.Comments}</text>";
@@ -347,6 +363,12 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation", gCBooking.FPTSiteId);
             ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name", gCBooking.LogisticalTransporterId);
             ViewData["VesselId"] = new SelectList(_context.Vessels, "Id", "VesselName", gCBooking.VesselId);
+            ViewData["Trade"] = new SelectList(
+    new List<SelectListItem>
+    {
+                new SelectListItem { Text = "Import", Value = "Import" } , new SelectListItem { Text = "Export", Value = "Export" }
+
+    }, "Value", "Text");
             return PartialView(gCBooking);
         }
 
@@ -385,25 +407,28 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                     //Email Notification - Updated Booking
                     await _emailSender.SendEmailAsync(email, $"{"Updated ~ " + DateTime.Now.ToString("dd MMMM yyyy HH:mm:ss") + " - General Cargo Booking : " + gCBooking.Date.ToString("dd MMMM yyyy") + " AT " + gCBooking.Time}",
 
-                        $"Booking Reference : <text> {gCBooking.BookingReference}</text>" +
-                        $"<br/>" +
-                        $"<br/>" +
-                        $"Booked Date : <text> {gCBooking.Date.ToString("dd MMMM yyyy")}</text>" +
-                        $"<br/>" +
-                        $"<br/>" +
-                        $"Booked Time : <text> {gCBooking.Time}</text>" +
-                        $"<br/>" +
-                        $"<br/>" +
-                        $"Booked For : <text> {transport + " - " + " Registration : " + gCBooking.Registration}</text>" +
-                        $"<br/>" +
-                        $"<br/>" +
-                        $"FPT Facility  : <text> {FPTsite}</text>" +
-                        $"<br/>" +
-                        $"<br/>" +
-                        $"Commodity & Quantity : <text> {commodity + " , " + gCBooking.Quantity}</text>" +
-                        $"<br/>" +
-                        $"<br/>" +
-                        $"Addtional Comments : <text>{gCBooking.Comments}</text>");
+                    $"Booking Reference : <text> {gCBooking.BookingReference}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Booked Date : <text> {gCBooking.Date.ToString("dd MMMM yyyy")}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Booked Time : <text> {gCBooking.Time}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Booked For : <text> {transport + " - " + " Registration : " + gCBooking.Registration}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"FPT Facility  : <text> {FPTsite}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Commodity & Quantity : <text> {commodity + " , " + gCBooking.Quantity}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Trade Type : <text>{gCBooking.Trade}</text>" +
+                    $"<br/>" +
+                    $"<br/>" +
+                    $"Addtional Comments : <text>{gCBooking.Comments}</text>");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -423,6 +448,13 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
             ViewData["FPTSiteId"] = new SelectList(_context.FPTSites, "Id", "SiteLocation", gCBooking.FPTSiteId);
             ViewData["LogisticalTransporterId"] = new SelectList(_context.LogisticalTransporters, "Id", "Name", gCBooking.LogisticalTransporterId);
             ViewData["VesselId"] = new SelectList(_context.Vessels, "Id", "VesselName", gCBooking.VesselId);
+            ViewData["Trade"] = new SelectList(
+    new List<SelectListItem>
+    {
+                new SelectListItem{Text="Import" , Value="0"},
+                new SelectListItem{Text="Export" , Value="1"}
+
+    }, "Value", "Text");
             return View(gCBooking);
         }
 

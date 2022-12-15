@@ -7,6 +7,16 @@
     .row {
         padding-bottom: 15px;
     }
+
+    .my-validation-message::before {
+        display: none;
+    }
+
+    .my-validation-message i {
+        margin: 0 .4em;
+        color: #f27474;
+        font-size: 1.4em;
+    }
 </style>
 <div>
     <center><h4>General Cargo Booking ~ @Model.BookingReference</h4></center>
@@ -97,6 +107,16 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="form-group col-sm-6 mx-auto">
+                    <b>  @Html.DisplayNameFor(model => model.Trade) :</b>
+                    @Html.DisplayFor(model => model.Trade)
+                </div>
+
+                <div class="form-group col-sm-6 mx-auto">
+                </div>
+            </div>
+
             <div>
                 <a class="btn btn-info active" style="float:right;" onclick="sendEmail()">Share Via Email <i class="fa fa-1x fa-share"></i></a>
                 <a class="btn btn-dark active" style="float:right;" type="submit">Print Booking Details <i class="fa fa-1x fa-print"></i></a>
@@ -114,6 +134,16 @@
             input: 'text',
             inputPlaceholder: 'Email Address',
             confirmButtonText: 'Send',
+            customClass: {
+                validationMessage: 'my-validation-message'
+            },
+            preConfirm: (result) => {
+                if (!result) {
+                    Swal.showValidationMessage(
+                        '<i class="fa fa-info-circle"></i> Email address is required'
+                    )
+                }
+            }
         }).then((result) => {
             if (!result) {
                 swal.close();
@@ -128,7 +158,7 @@
                     swal.close();
                     swal.fire({
                         title: "Email Sent!",
-                        text: "Please check your inbox",
+                        text: "Booking details sent to recipient ",
                         icon: "success",
                         confirmButtonText: "Okay",
                     });
@@ -136,7 +166,7 @@
                 error: function (jqXHR, textStatus, errorThrown) {
                     swal.fire({
                         title: "Error!",
-                        text: " Please try again! , only organizational emails allowed",
+                        text: " Please try again! , only FPT assigned emails allowed",
                         icon: "warning",
                         confirmButtonText: "Okay",
                     });

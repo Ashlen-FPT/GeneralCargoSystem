@@ -4,13 +4,13 @@
     ViewData["Title"] = "Vessels";
 }
 <style>
-        #myTable {
+    #myTable {
         font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
         width: 100%;
         background-color: black;
         border-radius: 12px;
-        color:white;
+        color: white;
     }
 
         #myTable th:first-child {
@@ -22,9 +22,9 @@
         }
 
         /*        #myTable td, #myTable th {
-                border: 1px solid #ddd;
-                padding: 8px;
-            }*/
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }*/
 
         #myTable tr:hover {
             background-color: dodgerblue;
@@ -79,7 +79,15 @@
                                         @Html.DisplayFor(modelItem => item.VesselName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.VesselNo)
+                                        @if (item.VesselNo == "" || item.VesselNo == null)
+                                        {
+                                            <p>N/A</p>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.VesselNo)
+                                        }
+
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.VoyageNo)
@@ -155,10 +163,10 @@
                 confirmButtonText: 'Delete'
             }).then((result) => {
                 if (result.isConfirmed) {
-                   var btn=$(this);
-                   var id = btn.data("id");
-                   $('#vesselId').val(id);
-                   $('#deleteForm').submit();
+                    var btn = $(this);
+                    var id = btn.data("id");
+                    $('#vesselId').val(id);
+                    $('#deleteForm').submit();
                 }
             });
         });

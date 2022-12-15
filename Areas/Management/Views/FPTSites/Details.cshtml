@@ -7,18 +7,23 @@
 <div>
     <h4>FPT Site Information</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-4">
-            @Html.DisplayNameFor(model => model.SiteLocation)
-        </dt>
-        <dd class = "col-sm-5">
-            @Html.DisplayFor(model => model.SiteLocation)
-        </dd>
-        <dt class = "col-sm-4">
-            @Html.DisplayNameFor(model => model.LocationId)
-        </dt>
-        <dd class = "col-sm-5">
-            @Html.DisplayFor(model => model.LocationId)
-        </dd>
-    </dl>
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.SiteLocation)
+                </dt>
+                <dd class="col-sm-5">
+                    @Html.DisplayFor(model => model.SiteLocation)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.LocationId)
+                </dt>
+                <dd class="col-sm-5">
+                    @Html.DisplayFor(model => model.LocationId)
+                </dd>
+            </dl>
+        </div>
+    </div>
+
 </div>

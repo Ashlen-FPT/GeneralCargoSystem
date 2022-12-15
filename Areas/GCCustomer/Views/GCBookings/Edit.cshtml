@@ -92,6 +92,14 @@
             </div>
             <br />
             <div class="form-group">
+                <label class="control-label">Import/Export</label>
+                <select asp-for="Trade" class="form-control form-select" asp-items="ViewBag.Trade">
+                    <option value="">Select Commodity Trade</option>
+                </select>
+                <span asp-validation-for="Trade" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
                 @*<label asp-for="VesselId" class="control-label"></label>*@
                 <label class="control-label"> Vessel</label>
                 <select asp-for="VesselId" class="form-control form-select" asp-items="ViewBag.VesselId">
@@ -117,5 +125,7 @@
 </script>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
