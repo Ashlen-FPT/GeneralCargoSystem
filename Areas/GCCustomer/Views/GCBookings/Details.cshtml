@@ -17,13 +17,38 @@
         color: #f27474;
         font-size: 1.4em;
     }
+
+    @@media print {
+      /*  body * {
+            visibility: hidden;
+        }*/
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #section-to-print, #section-to-print * {
+            visibility: visible;
+        }
+
+        #section-to-print {
+            position: center;
+            left: 0;
+            top: 0;
+        }
+
+        #actionBtns {
+            display: none;
+        }
+    }
 </style>
 <div>
     <center><h4>General Cargo Booking ~ @Model.BookingReference</h4></center>
     <hr />
     <div class="card">
 
-        <div class="card-body">
+        <div class="card-body" id="section-to-print">
 
             <div class="row">
                 <div class="form-group col-sm-6 mx-auto">
@@ -117,9 +142,9 @@
                 </div>
             </div>
 
-            <div>
-                <a class="btn btn-info active" style="float:right;" onclick="sendEmail()">Share Via Email <i class="fa fa-1x fa-share"></i></a>
-                <a class="btn btn-dark active" style="float:right;" type="submit">Print Booking Details <i class="fa fa-1x fa-print"></i></a>
+            <div style="float:right;" id="actionBtns">
+                <a class="btn btn-dark active" onclick="window.print()"> <i class="fa fa-1x fa-print"></i> Print Details</a>
+                <a class="btn btn-info active" onclick="sendEmail()"> <i class="fa fa-1x fa-share"></i> Share Via Email</a>
             </div>
         </div>
     </div>
@@ -134,6 +159,7 @@
             input: 'text',
             inputPlaceholder: 'Email Address',
             confirmButtonText: 'Send',
+            showCancelButton: true,
             customClass: {
                 validationMessage: 'my-validation-message'
             },
@@ -145,7 +171,7 @@
                 }
             }
         }).then((result) => {
-            if (!result) {
+            if (!result.isConfirmed) {
                 swal.close();
                 return null;
             };

@@ -1,7 +1,7 @@
 ﻿@model GeneralCargoSystem.Models.GC.GCBooking
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Booking Details";
 }
 <style>
     .row {
@@ -21,13 +21,35 @@
         color: #f27474;
         font-size: 1.4em;
     }
+
+    @@media print {
+        body * {
+            visibility: hidden;
+        }
+
+        #section-to-print, #section-to-print * {
+            visibility: visible;
+        }
+
+        #section-to-print {
+            position: center;
+            left: 0;
+            top: 0;
+            
+        }
+
+        #actionBtns {
+            display: none;
+        }
+        
+    }
 </style>
 <center><h1>General Cargo Trucking Booking Details</h1></center>
 <div id="detailsPage">
 
     <div class="card">
 
-        <div class="card-body">
+        <div class="card-body" id="section-to-print">
             <h4>General Cargo Booking ~ @Model.BookingReference</h4>
             <hr />
             <div class="row">
@@ -120,10 +142,9 @@
                 <div class="form-group col-sm-4 mx-auto">
                 </div>
             </div>
-
-            <div>
-                <a class="btn btn-info active" style="float:right;" onclick="sendEmail()">Share Via Email <i class="fa fa-1x fa-share"></i></a>
-                <a class="btn btn-dark active" style="float:right;" type="submit">Print Booking Details <i class="fa fa-1x fa-print"></i></a>
+            <div style="float:right;" id="actionBtns">
+                <a class="btn btn-dark active" onclick="window.print()"> <i class="fa fa-1x fa-print"></i> Print Details</a>
+                <a class="btn btn-info active" onclick="sendEmail()"> <i class="fa fa-1x fa-share"></i> Share Via Email</a>
             </div>
         </div>
     </div>
@@ -138,6 +159,7 @@
             input: 'text',
             inputPlaceholder: 'Email Address',
             confirmButtonText: 'Send',
+            showCancelButton: true,
             customClass: {
                 validationMessage: 'my-validation-message'
             },
@@ -149,11 +171,11 @@
                 }
             }
         }).then((result) => {
-            if (!result) {
+            if (!result.isConfirmed) {
                 swal.close();
                 return null;
             };
-            console.log(result.value)
+
             var uri = "/GCCustomer/GCBookings/SendViaEmail?id=" + @Model.Id + "&email=" + result.value;
             var res = encodeURI(uri);
             $.ajax({
@@ -164,15 +186,15 @@
                         title: "Email Sent!",
                         text: "Booking details sent to recipient ",
                         icon: "success",
-                        button: "Okay",
+                        confirmButtonText: "Okay",
                     });
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
+                error: function () {
                     swal.fire({
                         title: "Error!",
                         text: " Please try again! , only organizational emails allowed",
                         icon: "warning",
-                        button: "Okay",
+                        confirmButtonText: "Okay",
                     });
                 }
             });
