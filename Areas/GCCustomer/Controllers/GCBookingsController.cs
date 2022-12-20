@@ -148,10 +148,15 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 
         public IActionResult Booking(DateTime bDate, string bTime)
         {
+
+            var email = User.Identity!.Name!;
+            var findUsername = _context.ApplicationUsers.Where(a => a.Email == email).FirstOrDefault()!.FirstName;
             GCBooking book = new GCBooking();
 
             book.Time = bTime;
             book.Date = bDate;
+            book.Name=findUsername;
+            book.Email=email;
 
             TempData["Date"] = bDate;
             TempData["Time"] = bTime;
