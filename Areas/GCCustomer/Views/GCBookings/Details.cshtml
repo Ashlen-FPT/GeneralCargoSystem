@@ -18,10 +18,18 @@
         font-size: 1.4em;
     }
 
+    #heading {
+        display: none;
+    }
+
     @@media print {
-      /*  body * {
+
+        #heading{
+            display:block;
+        }
+        body * {
             visibility: hidden;
-        }*/
+        }
 
         html, body {
             height: 100%;
@@ -30,16 +38,23 @@
 
         #section-to-print, #section-to-print * {
             visibility: visible;
+
         }
 
         #section-to-print {
             position: center;
             left: 0;
             top: 0;
+            border: 10px solid #000;
         }
 
         #actionBtns {
             display: none;
+        }
+
+        @@page {
+            size: auto;
+            margin: 0;
         }
     }
 </style>
@@ -49,7 +64,8 @@
     <div class="card">
 
         <div class="card-body" id="section-to-print">
-
+            <center><h4 id="heading"><b>General Cargo Booking ~ @Model.BookingReference</b></h4></center>
+            <br/>
             <div class="row">
                 <div class="form-group col-sm-6 mx-auto">
                     <b>@Html.DisplayNameFor(model => model.Date) :</b>

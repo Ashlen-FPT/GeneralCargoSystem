@@ -274,26 +274,6 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 
 
         }
-
-        //TODO : Print
-        public IActionResult GCBookingDetails()
-        {
-            byte[] pdfBytes;
-
-            using (var stream = new MemoryStream())
-            using (var wri = new PdfWriter(stream))
-            using (var pdf = new PdfDocument(wri))
-            using (var doc = new Document(pdf))
-            {
-
-                doc.Add(new Paragraph("Test"));
-
-                doc.Close();
-                doc.Flush();
-                pdfBytes = stream.ToArray();
-            }
-            return new FileContentResult(pdfBytes, "application/pdf");
-        }
         // GET: GCCustomer/GCBookings/Details/5
         public async Task<IActionResult> Details(int? id)
         {

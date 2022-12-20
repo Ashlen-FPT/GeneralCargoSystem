@@ -22,11 +22,15 @@
         font-size: 1.4em;
     }
 
+
     @@media print {
         body * {
             visibility: hidden;
         }
 
+        #heading{
+            text-align:center;
+        }
         #section-to-print, #section-to-print * {
             visibility: visible;
         }
@@ -35,22 +39,27 @@
             position: center;
             left: 0;
             top: 0;
-            
+            border: 10px solid #000;
         }
 
         #actionBtns {
             display: none;
+        }
+
+        @@page {
+            size: auto;
+            margin: 0;
         }
         
     }
 </style>
 <center><h1>General Cargo Trucking Booking Details</h1></center>
 <div id="detailsPage">
-
     <div class="card">
 
         <div class="card-body" id="section-to-print">
-            <h4>General Cargo Booking ~ @Model.BookingReference</h4>
+          
+            <h4 id="heading">General Cargo Booking ~ @Model.BookingReference</h4>
             <hr />
             <div class="row">
                 <div class="form-group col-sm-4 mx-auto">
