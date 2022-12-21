@@ -155,8 +155,8 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
 
             book.Time = bTime;
             book.Date = bDate;
-            book.Name=findUsername;
-            book.Email=email;
+            book.Name = findUsername;
+            book.Email = email;
 
             TempData["Date"] = bDate;
             TempData["Time"] = bTime;
