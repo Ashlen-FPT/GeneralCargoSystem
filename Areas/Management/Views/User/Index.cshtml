@@ -112,6 +112,9 @@ function loadDataTable() {
 render:$.fn.dataTable.render.moment('', 'DD MMMM YYYY')
     } ],
         dom: 'Bfrtip',
+        language: {
+                    zeroRecords: "No related data found",
+                },
             buttons: [
                 {
                     extend: 'pageLength',

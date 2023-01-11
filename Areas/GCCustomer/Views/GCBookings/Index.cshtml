@@ -160,6 +160,9 @@
         $('#myTable').DataTable({
             order: [[1, 'desc']],
             dom: 'Bfrtip',
+            language: {
+                emptyTable: "No bookings found"
+            },
             buttons: [
                 {
                     extend: 'pageLength',
