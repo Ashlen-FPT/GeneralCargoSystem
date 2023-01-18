@@ -222,7 +222,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                     $"Trade Type : <text>{gCBooking.Trade}</text>" +
                     $"<br/>" +
                     $"<br/>" +
-                    $"Addtional Comments : <text>{gCBooking.Comments}</text>");
+                    $"Additional Comments : <text>{gCBooking.Comments}</text>");
 
                 return RedirectToAction(nameof(BookingDetails), new { id = gCBooking.Id });
             }
@@ -271,7 +271,7 @@ namespace GeneralCargoSystem.Areas.GCCustomer.Controllers
                     $"Trade Type : <text>{gCBooking.Trade}</text>" +
                     $"<br/>" +
                     $"<br/>" +
-                    $"Addtional Comments : <text>{gCBooking.Comments}</text>";
+                    $"Additional Comments : <text>{gCBooking.Comments}</text>";
 
 
             await _emailSender.SendEmailAsync(toAddress, subject, body);
