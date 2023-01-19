@@ -22,17 +22,39 @@
         font-size: 1.4em;
     }
 
+    #logo {
+        display: none;
+    }
+
+    #ref {
+        display: none;
+    }
 
     @@media print {
         body * {
             visibility: hidden;
         }
 
-        #heading{
-            text-align:center;
+        html, body {
+            background-color: white;
         }
+
+        #logo {
+            display: block;
+        }
+
+        #heading {
+            display: none;
+        }
+
+        #ref {
+            display: block;
+        }
+
         #section-to-print, #section-to-print * {
             visibility: visible;
+            background-color: white;
+            color: black;
         }
 
         #section-to-print {
@@ -40,6 +62,7 @@
             left: 0;
             top: 0;
             border: 10px solid #000;
+            background-color: white;
         }
 
         #actionBtns {
@@ -50,7 +73,6 @@
             size: auto;
             margin: 0;
         }
-        
     }
 </style>
 <center><h1>General Cargo Trucking Booking Details</h1></center>
@@ -58,8 +80,10 @@
     <div class="card">
 
         <div class="card-body" id="section-to-print">
-          
-            <h4 id="heading">General Cargo Booking ~ @Model.BookingReference</h4>
+            <i id="logo"><img src="~/FPT-Icon.png" alt="FPT" height="80" style="float:left;" /></i>
+            <h4 id="heading">General Cargo Booking~@Model.BookingReference</h4>
+            <center><h4 id="ref">General Cargo Booking</h4></center>
+            <center><h4 id="ref">@Model.BookingReference</h4></center>
             <hr />
             <div class="row">
                 <div class="form-group col-sm-4 mx-auto">

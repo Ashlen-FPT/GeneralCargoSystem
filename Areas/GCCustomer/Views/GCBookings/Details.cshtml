@@ -22,11 +22,28 @@
         display: none;
     }
 
+    #reference {
+        display: none;
+    }
+
+    #logo {
+        display: none;
+    }
+
     @@media print {
 
-        #heading{
-            display:block;
+        #heading {
+            display: block;
         }
+
+        #reference {
+            display: block;
+        }
+
+        #logo {
+            display: block;
+        }
+
         body * {
             visibility: hidden;
         }
@@ -34,11 +51,12 @@
         html, body {
             height: 100%;
             overflow: hidden;
+            background-color: white;
         }
 
         #section-to-print, #section-to-print * {
             visibility: visible;
-
+            color: black;
         }
 
         #section-to-print {
@@ -46,6 +64,7 @@
             left: 0;
             top: 0;
             border: 10px solid #000;
+            background-color: white;
         }
 
         #actionBtns {
@@ -59,13 +78,16 @@
     }
 </style>
 <div>
-    <center><h4>General Cargo Booking ~ @Model.BookingReference</h4></center>
+    <center><h4>General Cargo Booking @Model.BookingReference</h4></center>
     <hr />
     <div class="card">
 
         <div class="card-body" id="section-to-print">
-            <center><h4 id="heading"><b>General Cargo Booking ~ @Model.BookingReference</b></h4></center>
-            <br/>
+            <i id="logo"><img src="~/FPT-Icon.png" alt="FPT" height="80" style="float:left;" /></i>
+            <center><h4 id="heading"><b>General Cargo Booking</b></h4></center>
+            <center><h4 id="reference"><b>@Model.BookingReference</b></h4></center>
+            <br />
+
             <div class="row">
                 <div class="form-group col-sm-6 mx-auto">
                     <b>@Html.DisplayNameFor(model => model.Date) :</b>
