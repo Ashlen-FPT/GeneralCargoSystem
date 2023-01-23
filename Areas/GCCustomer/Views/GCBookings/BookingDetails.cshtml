@@ -58,10 +58,10 @@
         }
 
         #section-to-print {
-            position: center;
-            left: 0;
+          /*  position: center;*/
+         /*   left: 0;
             top: 0;
-            border: 10px solid #000;
+            border: 10px solid #000;*/
             background-color: white;
         }
 
@@ -70,8 +70,9 @@
         }
 
         @@page {
-            size: auto;
-            margin: 0;
+           /* size: auto;
+            margin: 0;*/
+            size: 8in 12in;
         }
     }
 </style>
@@ -80,11 +81,14 @@
     <div class="card">
 
         <div class="card-body" id="section-to-print">
-            <i id="logo"><img src="~/FPT-Icon.png" alt="FPT" height="80" style="float:left;" /></i>
+            <i id="logo"><img src="~/FPT-Icon.png" alt="FPT" height="110" style="float:right;" /></i>
+            <br />
             <h4 id="heading">General Cargo Booking: @Model.BookingReference</h4>
             <center><h4 id="ref">General Cargo Booking</h4></center>
             <center><h4 id="ref">@Model.BookingReference</h4></center>
             <hr />
+            <br />
+            <br />
             <div class="row">
                 <div class="form-group col-sm-4 mx-auto">
                     <b>@Html.DisplayNameFor(model => model.Date) :</b>
