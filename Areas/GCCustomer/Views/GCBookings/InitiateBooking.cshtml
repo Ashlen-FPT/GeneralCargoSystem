@@ -41,8 +41,9 @@
     #cbooking {
         display: none;
     }
-    #bookingInitialization{
-        padding-top:60px;
+
+    #bookingInitialization {
+        padding-top: 60px;
     }
 </style>
 <center>
@@ -205,6 +206,9 @@
     <script>
         // > Greater
         // < Less
+
+        const d = new Date();
+        let timeString = d.toTimeString();
 
         var dateInput = document.getElementById('date');
         let currentDate = new Date().toJSON().slice(0, 10);
@@ -621,7 +625,7 @@
             if (dateInput.value === currentDate) {
 
                 $('#btnBooking').click(function () {
-                    if (time < currentTime) {
+                    if (time < timeString) {
 
                         Swal.fire(
                             'Invalid Booking Time',
