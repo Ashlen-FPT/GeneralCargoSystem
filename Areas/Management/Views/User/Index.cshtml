@@ -74,6 +74,7 @@
                         <th>Role</th>
                         <th>Verification</th>
                         <th>User Status</th>
+                        <th>Edit Role</th>
                     </tr>
                 </thead>
             </table>
@@ -199,6 +200,7 @@ render:$.fn.dataTable.render.moment('', 'DD MMMM YYYY')
                                 </a>
                             </div>
                            `;
+                           
                     }
                     else {
                         return `
@@ -210,6 +212,23 @@ render:$.fn.dataTable.render.moment('', 'DD MMMM YYYY')
                            `;
                     }
 
+                }, "width": "25%"
+            },
+            {
+                "data": {
+                    id: "id", userStatus: "userStatus"
+                },
+                "render": function (data) {
+                   
+                        return `
+                            <div class="text-center">
+                                <a data-ajax="true" data-ajax-url=@Url.Action("EditRole","User",new{id="124"}) data-ajax-success="Modal.PartialView" class="btn btn-success text-black" style="cursor:pointer;" title="Edit User Role">
+                                     <i class="fas fa-pencil"></i>
+                                </a>
+                            </div>
+                           `;
+                           
+                           
                 }, "width": "25%"
             }
         ]

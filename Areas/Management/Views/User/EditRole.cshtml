@@ -1,0 +1,46 @@
+﻿@model GeneralCargoSystem.Models.ApplicationUser
+
+
+<style>
+    .modal-dialog {
+        overflow-y: initial !important
+    }
+
+    .modal-body {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
+</style>
+<h4>Edit User Role</h4>
+<hr />
+<div class="row">
+    <div>
+        <form asp-action="EditRole" id="updateRole">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="row">
+                <div class="form-group col-sm-6 mx-auto">
+                    <label asp-for="Role" class="control-label"></label>
+                    <select asp-for="Role" class="form-control form-select" asp-items="ViewBag.Roles">
+                        <option value="">Select Role</option>
+                    </select>
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-group" style="padding-top:10px; float:right;">
+                <input type="submit" value="Update Role" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $.validator.unobtrusive.parse("#updateRole");
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

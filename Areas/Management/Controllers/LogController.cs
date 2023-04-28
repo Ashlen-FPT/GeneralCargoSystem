@@ -32,5 +32,19 @@ namespace GeneralCargoSystem.Areas.Management.Controllers
 
             return Json(new { data = logs });
         }
+
+        public void DeleteLogs()
+        {
+            var expiredLogs = DateTime.Now.AddMonths(-6);
+            var oldLogs = _context.Logs.Where(e => e.DateTime <= expiredLogs);
+            foreach (var item in oldLogs)
+            {
+                var e = _context.Logs.Find(item.Id);
+                if (e != null)
+                {
+                    _context.Logs.Remove(e);
+                }
+            }
+        }
     }
 }
